@@ -1,0 +1,48 @@
+.container_burgerIngredients {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  max-width: 100vw;
+  width: 600px;
+}
+.burger_tabs {
+  composes: pt-5 mb-10 from global;
+  display: flex;
+}
+.container_cards {
+  max-height: 650px;
+  overflow-y: overlay;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+.container_card {
+  display: flex;
+  flex-wrap: wrap;
+}
+.card {
+  composes: pt-6 mb-8 from global;
+  width: calc(50% - 24px);
+  text-align: center;
+  position: relative;
+}
+.price_card {
+  composes: text text_type_digits-default pt-1 pb-1 from global;
+  display: inline-flex;
+}
+.image_card {
+  composes: pl-4 pr-4 from global;
+}
+.icon_price_card {
+  display: flex;
+  padding-left: 10px;
+}
+.title_cards {
+  composes: pt-10 text text_type_main-large from global;
+}
+
+.title_card {
+  composes: text text_type_main-medium from global;
+}
+.name_card {
+  composes: text text_type_main-small from global;
+}

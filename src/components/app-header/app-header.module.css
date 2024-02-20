@@ -1,0 +1,55 @@
+:root {
+  --container-width: 1280px;
+  --logo-width: 290px;
+}
+
+.header {
+  display: flex;
+  flex-flow: row wrap;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: #1c1c21;
+  margin-left: -20px;
+  margin-right: -20px;
+}
+.link {
+  composes: pl-5 pr-5 pb-4 pt-4 from global;
+}
+.test {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.container_header,
+.nav {
+  composes: test;
+}
+.link_text {
+  composes: text text_type_main-default text_color_inactive from global;
+  composes: test;
+}
+.link_active {
+  composes: text text_type_main-small from global;
+  composes: test;
+}
+.container_header {
+  max-width: 100vw;
+  width: var(--container-width);
+}
+.nav {
+  max-width: calc((100vw - var(--logo-width)) / 2);
+}
+.user_account {
+  composes: link;
+  composes: nav;
+}
+.logo {
+  position: absolute;
+  width: var(--logo-width);
+  left: calc(50% - var(--logo-width) / 2);
+}
+.icon {
+  display: flex;
+  margin-right: 8px;
+}
