@@ -29,9 +29,9 @@ export default function BurgerConstructor({ data }) {
     const randomIngredients = data.filter(({ type }) => type !== 'bun');
     return randomIngredients.sort(() => Math.random() - Math.random()).slice(0, 5);
   }
-  function getFinalSum(ingredientss, bunIngredients) {
-    const sumBun = bunIngredients.price;
-    const sum = (ingredientss.map(ingredient => ingredient.price).reduce((prev, curr) => prev + curr, 0) + 2 * sumBun);
+  function getFinalSum(otherIngredients, bun) {
+    const sumBun = bun.price;
+    const sum = (otherIngredients.map(ingredient => ingredient.price).reduce((prev, curr) => prev + curr, 0) + 2 * sumBun);
     return sum;
   }
 
