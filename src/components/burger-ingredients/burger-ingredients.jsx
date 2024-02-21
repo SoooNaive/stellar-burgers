@@ -46,6 +46,10 @@ export default function BurgerIngredients({ dataIngredients }) {
     }));
   }
 
+  function onIngredientClick(ingredient) {
+   console.log(ingredient);
+  }
+
   return (
     <>
       <div className={style.container_burgerIngredients}>
@@ -68,7 +72,7 @@ export default function BurgerIngredients({ dataIngredients }) {
               <p className={style.title_card}>{typeTitle}</p>
               <div className={style.container_card}>
                 {ingredients.map((ingredient) => (
-                  <div key={ingredient._id} className={style.card}>
+                  <div key={ingredient._id} className={style.card} onClick={() => onIngredientClick(ingredient)}>
                       <Counter count={0} size="default" extraClass="m-1" />
                       <img
                         className={style.image_card}

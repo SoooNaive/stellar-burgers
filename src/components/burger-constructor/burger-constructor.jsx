@@ -15,7 +15,9 @@ export default function BurgerConstructor({ dataIngredients }) {
   useEffect(() => {
      setBunIngredient(getBunIngredient(dataIngredients));
      setIngredients(getRandomIngredients(dataIngredients));
+     
   }, [dataIngredients]);
+
 
   useEffect(() => {
      setFinalSum(getFinalSum(ingredients, bunIngredient));
