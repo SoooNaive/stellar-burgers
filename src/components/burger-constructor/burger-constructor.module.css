@@ -1,0 +1,35 @@
+.burger_constructor {
+  composes: mb-4 from global;
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+}
+.all_ingredients {
+  display: flex;
+  flex-direction: column;
+
+}
+.ingredient {
+  composes: mb-4 from global;
+  display: inline-flex;
+  align-items: center;
+
+}
+.burger_constructor > .ingredient:first-child,
+.burger_constructor > .ingredient:last-child {
+  margin-left: 24px;
+}
+.finalSum {
+  composes: text text_type_digits-medium mr-2 from global;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.finalSum_icon {
+  padding-left: 10px;
+}
+.scroll {
+  min-height: 80px;
+  overflow-y: overlay;
+}
