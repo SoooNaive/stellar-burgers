@@ -1,21 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { DataType } from "../app/utils/data-type";
 import {
   Button,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styleBurgerConstructor from './burger-constructor.module.css';
+import style from './burger-constructor.module.css';
 import BurgerElement from './burger-element.jsx';
-export default function BurgerConstructor({ data }) {
-  const [bunIngredient, setBunIngredient] = React.useState([]);
-  const [ingredients, setIngredients] = React.useState([]);
-  const [finalSum, setFinalSum] = React.useState();
+export default function BurgerConstructor({ dataIngredients }) {
+  const [bunIngredient, setBunIngredient] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
+  const [finalSum, setFinalSum] = useState();
 
   useEffect(() => {
-     setBunIngredient(getBunIngredient(data));
-     setIngredients(getRandomIngredients(data));
-  }, [data]);
+     setBunIngredient(getBunIngredient(dataIngredients));
+     setIngredients(getRandomIngredients(dataIngredients));
+  }, [dataIngredients]);
 
   useEffect(() => {
      setFinalSum(getFinalSum(ingredients, bunIngredient));
@@ -37,27 +37,26 @@ export default function BurgerConstructor({ data }) {
 
   return (
     <>
-      <div className={styleBurgerConstructor.burger_constructor}>
+      <div className={style.burger_constructor}>
         <BurgerElement data={bunIngredient} type={'top'} isLocked={true}/>
-        <div className={styleBurgerConstructor.scroll}>
-          <div className={styleBurgerConstructor.all_ingredients}>
+        <div className={style.scroll}>
+          <div className={style.all_ingredients}>
             {ingredients.map((ingredient) => (
-              <React.Fragment key={ingredient._id}>
                 <BurgerElement
+                  key={ingredient._id}
                   data={ingredient}
                   isLocked={false}
                 />
-              </React.Fragment>
             ))}
           </div>
         </div>
           <BurgerElement data={bunIngredient} type={'bottom'} isLocked={true} />
       </div>
 
-      <div className={styleBurgerConstructor.finalSum}>
+      <div className={style.finalSum}>
         <p>
           {finalSum}
-          <span className={styleBurgerConstructor.finalSum_icon}>
+          <span className={style.finalSum_icon}>
             <CurrencyIcon type="primary" />
           </span>
         </p>
@@ -74,5 +73,5 @@ export default function BurgerConstructor({ data }) {
   );
 }
 BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(DataType)
+  dataIngredients: PropTypes.arrayOf(DataType).isRequired
 };

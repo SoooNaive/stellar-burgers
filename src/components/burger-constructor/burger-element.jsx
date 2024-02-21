@@ -2,16 +2,16 @@ import {
   DragIcon,
   ConstructorElement,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styleBurgerConstructor from './burger-constructor.module.css';
+import style from './burger-constructor.module.css';
 import PropTypes from "prop-types";
 import { DataType } from '../app/utils/data-type';
 export default function BurgerElement({ data, type, isLocked }) {
  
   return (
     <>
-      <div className={styleBurgerConstructor.ingredient}>
-        <div className={styleBurgerConstructor.icon}>
-          {type === undefined && <DragIcon type="primary" />}
+      <div className={style.ingredient}>
+        <div className={style.icon}>
+          {!type && <DragIcon type="primary" />}
         </div>
         <ConstructorElement
           text={data.name}

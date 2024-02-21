@@ -14,10 +14,10 @@ function App() {
       <AppHeader />
       <main className={styleApp.container_app}>
         <div className={styleApp.container_ingredients}>
-          <BurgerIngredients data={ingredients} />
+          <BurgerIngredients dataIngredients={ingredients} />
         </div>
         <div className={styleApp.container_cunstructor}>
-          <BurgerConstructor data={ingredients} />
+          <BurgerConstructor dataIngredients={ingredients} />
         </div>
       </main>
     </>

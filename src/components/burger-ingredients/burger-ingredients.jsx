@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { DataType } from "../app/utils/data-type";
 import {
@@ -6,7 +6,7 @@ import {
   CurrencyIcon,
   Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styleBurgerIngredients from './burger-ingredients.module.css';
+import style from './burger-ingredients.module.css';
 
 const ingredientsTypes = {
   main: 'Начинки',
@@ -19,28 +19,28 @@ const tabs = ['bun', 'sauce', 'main'].map((type) => ({
   title: ingredientsTypes[type],
 }));
 
-export default function BurgerIngredients({ data }) {
-  const [current, setCurrent] = React.useState('bun');
-  const [listIngredients, setListIngredients] = React.useState([]);
+export default function BurgerIngredients({ dataIngredients }) {
+  const [current, setCurrent] = useState('bun');
+  const [listIngredients, setListIngredients] = useState([]);
 
   useEffect(() => {
-    setListIngredients(getDataList(data));
-  }, [data]);
+    setListIngredients(getDataList(dataIngredients));
+  }, [dataIngredients]);
 
   function onTabClick(current) {
     setCurrent(current);
   }
 
   function getDataList(data) {
-    const typesGroupIngregients = new Map();
+    const typesGroupIngredients = new Map();
 
     for (let i = 0; i < data.length; i++) {
       const ingredient = data[i];
-      const typeIngredients = typesGroupIngregients.get(ingredient.type) || [];
+      const typeIngredients = typesGroupIngredients.get(ingredient.type) || [];
       typeIngredients.push(ingredient);
-      typesGroupIngregients.set(ingredient.type, typeIngredients);
+      typesGroupIngredients.set(ingredient.type, typeIngredients);
     }
-    return Array.from(typesGroupIngregients).map(([type, typeIngredients]) => ({
+    return Array.from(typesGroupIngredients).map(([type, typeIngredients]) => ({
       typeTitle: ingredientsTypes[type],
       ingredients: typeIngredients,
     }));
@@ -48,9 +48,9 @@ export default function BurgerIngredients({ data }) {
 
   return (
     <>
-      <div className={styleBurgerIngredients.container_burgerIngredients}>
-        <p className={styleBurgerIngredients.title_cards}>Соберите бургер</p>
-        <div className={styleBurgerIngredients.burger_tabs}>
+      <div className={style.container_burgerIngredients}>
+        <p className={style.title_cards}>Соберите бургер</p>
+        <div className={style.burger_tabs}>
           {tabs.map(({ type, title }) => (
             <Tab
               key={type}
@@ -62,33 +62,31 @@ export default function BurgerIngredients({ data }) {
             </Tab>
           ))}
         </div>
-        <div className={styleBurgerIngredients.container_cards}>
+        <div className={style.container_cards}>
           {listIngredients.map(({ typeTitle, ingredients }) => (
             <div key={typeTitle}>
-              <p className={styleBurgerIngredients.title_card}>{typeTitle}</p>
-              <div className={styleBurgerIngredients.container_card}>
+              <p className={style.title_card}>{typeTitle}</p>
+              <div className={style.container_card}>
                 {ingredients.map((ingredient) => (
-                  <React.Fragment key={ingredient._id}>
-                    <div className={styleBurgerIngredients.card}>
+                  <div key={ingredient._id} className={style.card}>
                       <Counter count={0} size="default" extraClass="m-1" />
                       <img
-                        className={styleBurgerIngredients.image_card}
+                        className={style.image_card}
                         src={ingredient.image}
                         alt={ingredient.name}
                       />
-                      <p className={styleBurgerIngredients.price_card}>
+                      <p className={style.price_card}>
                         {ingredient.price}
                         <span
-                          className={styleBurgerIngredients.icon_price_card}
+                          className={style.icon_price_card}
                         >
                           <CurrencyIcon type="primary" />
                         </span>
                       </p>
-                      <p className={styleBurgerIngredients.name_card}>
+                      <p className={style.name_card}>
                         {ingredient.name}
                       </p>
                     </div>
-                  </React.Fragment>
                 ))}
               </div>
             </div>
@@ -99,6 +97,6 @@ export default function BurgerIngredients({ data }) {
   );
 }
 BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(DataType),
+  dataIngredients: PropTypes.arrayOf(DataType).isRequired,
 };
 
