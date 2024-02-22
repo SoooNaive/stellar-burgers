@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from "prop-types";
-import { DataType } from "../app/utils/data-type";
-import {
-  Tab,
-  CurrencyIcon,
-  Counter,
-} from '@ya.praktikum/react-developer-burger-ui-components';
+import PropTypes from 'prop-types';
+import { DataType } from '../app/utils/data-type';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-ingredients.module.css';
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
+import Modal from '../modal/modal';
+import IngredientDetails from '../ingredient-details/ingredient-details';
+import IngredientCard from './ingredient-card';
 
 const ingredientsTypes = {
   main: 'Начинки',
@@ -71,32 +68,12 @@ export default function BurgerIngredients({ dataIngredients }) {
         </div>
         <div className={style.container_cards}>
           {listIngredients.map(({ typeTitle, ingredients }) => (
-            <div key={typeTitle}>
-              <p className={style.title_card}>{typeTitle}</p>
-              <div className={style.container_card}>
-                {ingredients.map((ingredient) => (
-                  <div key={ingredient._id} className={style.card} onClick={() => onIngredientClick(ingredient)}>
-                      <Counter count={0} size="default" extraClass="m-1" />
-                      <img
-                        className={style.image_card}
-                        src={ingredient.image}
-                        alt={ingredient.name}
-                      />
-                      <p className={style.price_card}>
-                        {ingredient.price}
-                        <span
-                          className={style.icon_price_card}
-                        >
-                          <CurrencyIcon type="primary" />
-                        </span>
-                      </p>
-                      <p className={style.name_card}>
-                        {ingredient.name}
-                      </p>
-                    </div>
-                ))}
-              </div>
-            </div>
+            <IngredientCard
+              key={typeTitle}
+              ingredients={ingredients}
+              typeTitle={typeTitle}
+              onIngredientClick={onIngredientClick}
+            />
           ))}
         </div>
       </div>
@@ -111,4 +88,3 @@ export default function BurgerIngredients({ dataIngredients }) {
 BurgerIngredients.propTypes = {
   dataIngredients: PropTypes.arrayOf(DataType).isRequired,
 };
-
