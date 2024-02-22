@@ -1,0 +1,19 @@
+.container_details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.details_name {
+    composes: text text_type_main-medium mt-4 mb-8 from global;
+}
+.details {
+    display: flex;
+    column-gap: 20px;
+}
+.details_text {
+    composes: text text_type_main-default text_color_inactive from global;
+}
+.details_value {
+    composes: pt-2 text text_type_digits-default text_color_inactive from global;
+    text-align: center;
+}

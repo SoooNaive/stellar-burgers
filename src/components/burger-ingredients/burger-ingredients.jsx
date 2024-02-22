@@ -7,6 +7,8 @@ import {
   Counter,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-ingredients.module.css';
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
 
 const ingredientsTypes = {
   main: 'Начинки',
@@ -22,6 +24,7 @@ const tabs = ['bun', 'sauce', 'main'].map((type) => ({
 export default function BurgerIngredients({ dataIngredients }) {
   const [current, setCurrent] = useState('bun');
   const [listIngredients, setListIngredients] = useState([]);
+  const [ingredientDetails, setIngredientDetails] = useState();
 
   useEffect(() => {
     setListIngredients(getDataList(dataIngredients));
@@ -29,6 +32,10 @@ export default function BurgerIngredients({ dataIngredients }) {
 
   function onTabClick(current) {
     setCurrent(current);
+  }
+
+  function onIngredientClick(ingredient) {
+    setIngredientDetails(ingredient);
   }
 
   function getDataList(data) {
@@ -44,10 +51,6 @@ export default function BurgerIngredients({ dataIngredients }) {
       typeTitle: ingredientsTypes[type],
       ingredients: typeIngredients,
     }));
-  }
-
-  function onIngredientClick(ingredient) {
-   console.log(ingredient);
   }
 
   return (
@@ -97,6 +100,11 @@ export default function BurgerIngredients({ dataIngredients }) {
           ))}
         </div>
       </div>
+      {ingredientDetails && (
+        <Modal header="Детали ингредиента" onClose={() => onIngredientClick()}>
+          <IngredientDetails ingredient={ingredientDetails} />
+        </Modal>
+      )}
     </>
   );
 }

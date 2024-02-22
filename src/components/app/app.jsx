@@ -18,12 +18,12 @@ function App() {
     const getIngregients = async () => {
       return fetch(urlFetch)
             .then((response) => {
-                return response.ok ? response.json() : setIngredients({ ...ingredients, success: false });
+              return response.ok ? response.json() : setIngredients({ ...ingredients, success: false });
             })
-        .then(data => setIngredients({data: data.data, success: data.success}))
-        .catch(e => {
-          setError(e);
-      });
+            .then(data => setIngredients({data: data.data, success: data.success}))
+            .catch(e => {
+              setError(e);
+            });
     }
     getIngregients(); 
   }, []);
