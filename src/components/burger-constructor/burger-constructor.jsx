@@ -7,15 +7,20 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor.module.css';
 import BurgerElement from './burger-element.jsx';
+import OrderDetails from "../order-details/order-details";
+import Modal from "../modal/modal";
+
 export default function BurgerConstructor({ dataIngredients }) {
   const [bunIngredient, setBunIngredient] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [finalSum, setFinalSum] = useState();
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
      setBunIngredient(getBunIngredient(dataIngredients));
      setIngredients(getRandomIngredients(dataIngredients));
   }, [dataIngredients]);
+
 
   useEffect(() => {
      setFinalSum(getFinalSum(ingredients, bunIngredient));
@@ -33,6 +38,10 @@ export default function BurgerConstructor({ dataIngredients }) {
     const sumBun = bun.price;
     const sum = (otherIngredients.map(ingredient => ingredient.price).reduce((prev, curr) => prev + curr, 0) + 2 * sumBun);
     return sum;
+  }
+
+  function onBtnClick() {
+    setModalOpen(!modalOpen);
   }
 
   return (
@@ -65,10 +74,16 @@ export default function BurgerConstructor({ dataIngredients }) {
           type="primary"
           size="large"
           extraClass="ml-10"
+          onClick={onBtnClick}
         >
           Оформить заказ
         </Button>
       </div>
+      {modalOpen && (
+        <Modal onClose={() => onBtnClick()}>
+          <OrderDetails />
+        </Modal>
+      )}
     </>
   );
 }
