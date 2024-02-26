@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { DataType } from '../app/utils/data-type';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -6,6 +6,7 @@ import style from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from './ingredient-card';
+import IngredientsContext from "../app/utils/ingredients-context";
 
 const ingredientsTypes = {
   main: 'Начинки',
@@ -18,10 +19,12 @@ const tabs = ['bun', 'sauce', 'main'].map((type) => ({
   title: ingredientsTypes[type],
 }));
 
-export default function BurgerIngredients({ dataIngredients }) {
+export default function BurgerIngredients() {
   const [current, setCurrent] = useState('bun');
   const [listIngredients, setListIngredients] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState();
+
+  const dataIngredients = useContext(IngredientsContext);
 
   useEffect(() => {
     setListIngredients(getDataList(dataIngredients));
@@ -86,5 +89,5 @@ export default function BurgerIngredients({ dataIngredients }) {
   );
 }
 BurgerIngredients.propTypes = {
-  dataIngredients: PropTypes.arrayOf(DataType).isRequired,
+  dataIngredients: DataType,
 };

@@ -4,6 +4,7 @@ import { getData } from './utils/data';
 import AppHeader from '../app-header/app-header.jsx';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
+import IngredientsContext from "./utils/ingredients-context";
 
 
 function App() {
@@ -32,22 +33,24 @@ function App() {
 
   return (
     <>
-    <AppHeader />
-      {error && 
-        <div className={styleApp.container_error}>
-          <p className={styleApp.error_text}>Что-то пошло не так :(</p>
-        </div>}
+      <IngredientsContext.Provider value={data}>
+        <AppHeader />
+        {error && 
+          <div className={styleApp.container_error}>
+            <p className={styleApp.error_text}>Что-то пошло не так :(</p>
+          </div>}
 
-      {!error && data.length &&
-        <main className={styleApp.container_app}>
-        <div className={styleApp.container_ingredients}>
-          <BurgerIngredients dataIngredients={data} />
-        </div>
-        <div className={styleApp.container_cunstructor}>
-          <BurgerConstructor dataIngredients={data} />
-        </div>
-      </main>
-      }
+        {!error && data.length &&
+          <main className={styleApp.container_app}>
+            <div className={styleApp.container_ingredients}>
+              <BurgerIngredients />
+            </div>
+            <div className={styleApp.container_cunstructor}>
+              <BurgerConstructor />
+            </div>
+          </main>
+        }
+      </IngredientsContext.Provider>
     </>
   );
 }
