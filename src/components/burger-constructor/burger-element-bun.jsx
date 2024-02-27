@@ -3,19 +3,19 @@ import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-comp
   import PropTypes from "prop-types";
   import { DataType } from '../app/utils/data-type';
   export default function BurgerElementBun({ data, type, isLocked, top }) {
-  
-    const text = `${data.name} (${top ? "верх" : "низ"})`;
-
     return (
       <>
         <div className={style.ingredient}>
-          <ConstructorElement
-            text={text}
-            thumbnail={data.image_mobile}
-            price={data.price}
-            isLocked={isLocked}
-            type={type}
-          />
+          {data.map((bun) => (
+            <ConstructorElement
+              key={bun._id}
+              text={`${bun.name} (${top ? "верх" : "низ"})`}
+              thumbnail={bun.image_mobile}
+              price={bun.price}
+              isLocked={isLocked}
+              type={type}
+            />
+          ))} 
         </div>
       </>
     );

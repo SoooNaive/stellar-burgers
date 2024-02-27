@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import PropTypes from 'prop-types';
-import { DataType } from '../app/utils/data-type';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
@@ -88,6 +86,3 @@ export default function BurgerIngredients() {
     </>
   );
 }
-BurgerIngredients.propTypes = {
-  dataIngredients: DataType,
-};

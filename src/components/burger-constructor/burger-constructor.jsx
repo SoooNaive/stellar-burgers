@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useContext, useReducer } from 'react';
-import PropTypes from "prop-types";
-import { DataType } from "../app/utils/data-type";
 import {
   Button,
   CurrencyIcon,
@@ -26,59 +24,92 @@ function finalSumReducer(state, action) {
   }
 }
 
-
 export default function BurgerConstructor() {
+
   const dataIngredients = useContext(IngredientsContext);
 
   const [bunIngredient, setBunIngredient] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-  // const [finalSum, setFinalSum] = useState();
   const [modalOpen, setModalOpen] = useState(false);
+
+  // Стейты для оформления заказа
+  const [order, setOrder] = useState(false);
+  const [allIngredients, setAllIngredients] = useState([]);
+  const [numberOrder, setNumberOrder] = useState(null);
+  const [error, setError] = useState();
 
   const [finalSumState, finalSumDispatch] = useReducer(
     finalSumReducer,
     initialState
   );
 
-
+  // Запись в стейт ингредиентов и булки
   useEffect(() => {
      setBunIngredient(getBunIngredient(dataIngredients));
      setIngredients(getRandomIngredients(dataIngredients));
   }, [dataIngredients]);
 
-
-  // useEffect(() => {
-  //    setFinalSum(getFinalSum(ingredients, bunIngredient));
-  // }, [ingredients, bunIngredient]);
-
-
+  // Результирующая сумма
   useEffect(() => {
       ingredients.map(ingredient => {
         finalSumDispatch({ type: "ingredient", payload: ingredient });
       });
-      // finalSumDispatch({ type: "bun", payload: bunIngredient }); 
-  },
-  [ingredients, bunIngredient]
-);
+      bunIngredient.map(bun => {
+        finalSumDispatch({ type: "bun", payload: bun });
+      });
+  }, [ingredients, bunIngredient]);
 
+  // Если нажали на кнопку "оформить" и номер заказа пустой, то выполнить запрос
+  useEffect(() => {
+    if(order && !numberOrder) {
+      sendOrder(allIngredients);
+    }
+  }, [allIngredients])
+
+  // Получить рандомную булку
   function getBunIngredient(data) {
-    return data.find(({ type }) => type === 'bun');
+    const randomBunIngredients = data.filter(({ type }) => type === 'bun').sort(() => Math.random() - Math.random()).slice(0, 1);
+    return randomBunIngredients;
   }
 
+  // Получить 5 рандомных ингредиентов
   function getRandomIngredients(data) {
     const randomIngredients = data.filter(({ type }) => type !== 'bun');
     return randomIngredients.sort(() => Math.random() - Math.random()).slice(0, 5);
   }
-  // function getFinalSum(otherIngredients, bun) {
-  //   const sumBun = bun.price;
-  //   const sum = (otherIngredients.map(ingredient => ingredient.price).reduce((prev, curr) => prev + curr, 0) + 2 * sumBun);
-  //   return sum;
-  // }
 
+  // Клик по кнопке "Оформить"
   function onBtnClick() {
-    // console.log(ingredients);
+    const idIngedients = ingredients.map(ingredient => {
+      return ingredient._id });
+    const idBun = bunIngredient.map(bun => {
+        return bun._id });
+    setAllIngredients(idIngedients.concat(idBun, idBun));
+    setOrder(true);
     setModalOpen(!modalOpen);
   }
+
+  const sendOrder = async () => {
+    return fetch("https://norma.nomoreparties.space/api/orders", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            "ingredients": allIngredients
+        })
+    })
+    .then((response) => {
+      return response.ok ? response.json() : setNumberOrder({ ...numberOrder })
+    })
+    .then((number) => {
+      setNumberOrder(number.order.number);
+      })
+    .catch(e => {
+      setError(e);
+    });
+}
+
 
   return (
     <>
@@ -117,12 +148,9 @@ export default function BurgerConstructor() {
       </div>
       {modalOpen && (
         <Modal onClose={() => onBtnClick()}>
-          <OrderDetails />
+          <OrderDetails numberOrder={numberOrder} error={error} />
         </Modal>
       )}
     </>
   );
 }
-BurgerConstructor.propTypes = {
-  dataIngredients: DataType
-};

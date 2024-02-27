@@ -20,3 +20,9 @@
     composes: mt-15 mb-15 from global;
     width: 30%;
 }
+.container_error {
+    composes: container_error from "../app/app.module.css";
+}
+.error_text {
+    composes: error_text from "../app/app.module.css";
+}
