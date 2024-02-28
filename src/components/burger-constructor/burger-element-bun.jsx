@@ -1,7 +1,7 @@
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components';
   import style from './burger-constructor.module.css';
   import PropTypes from "prop-types";
-  import { DataType } from '../app/utils/data-type';
+  import { DataType } from '../utils/data-type';
   export default function BurgerElementBun({ data, type, isLocked, top }) {
     return (
       <>

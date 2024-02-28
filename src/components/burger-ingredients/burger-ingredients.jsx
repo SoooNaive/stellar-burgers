@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from './ingredient-card';
-import IngredientsContext from "../app/utils/ingredients-context";
+import IngredientsContext from "../services/ingredients-context";
 
 const ingredientsTypes = {
   main: 'Начинки',
@@ -24,9 +24,11 @@ export default function BurgerIngredients() {
 
   const dataIngredients = useContext(IngredientsContext);
 
+
   useEffect(() => {
     setListIngredients(getDataList(dataIngredients));
   }, [dataIngredients]);
+  
 
   function onTabClick(current) {
     setCurrent(current);
@@ -46,6 +48,7 @@ export default function BurgerIngredients() {
       typesGroupIngredients.set(ingredient.type, typeIngredients);
     }
     return Array.from(typesGroupIngredients).map(([type, typeIngredients]) => ({
+      type: type,
       typeTitle: ingredientsTypes[type],
       ingredients: typeIngredients,
     }));
@@ -68,12 +71,14 @@ export default function BurgerIngredients() {
           ))}
         </div>
         <div className={style.container_cards}>
-          {listIngredients.map(({ typeTitle, ingredients }) => (
+          {listIngredients.map(({ typeTitle, ingredients, type }) => (
             <IngredientCard
               key={typeTitle}
               ingredients={ingredients}
               typeTitle={typeTitle}
               onIngredientClick={onIngredientClick}
+              type={type}
+              current={current}
             />
           ))}
         </div>

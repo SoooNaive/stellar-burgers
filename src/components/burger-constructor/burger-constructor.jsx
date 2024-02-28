@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useReducer } from 'react';
+import { useEffect, useState, useContext, useMemo } from 'react';
 import {
   Button,
   CurrencyIcon,
@@ -8,28 +8,16 @@ import BurgerElement from './burger-element.jsx';
 import BurgerElementBun from './burger-element-bun.jsx';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
-import IngredientsContext from "../app/utils/ingredients-context";
+import IngredientsContext from "../services/ingredients-context";
+import { getData } from '../utils/data';
 
 
-const initialState = { finalSum: 0 };
-
-function finalSumReducer(state, action) {
-  switch (action.type) {
-    case "bun":
-      return { finalSum: state.finalSum + action.payload.price * 2 };
-    case "ingredient":
-      return { finalSum: state.finalSum + action.payload.price };
-    default:
-      throw new Error(`Wrong type of action: ${action.type}`);
-  }
-}
+const API_URL = getData();
 
 export default function BurgerConstructor() {
 
   const dataIngredients = useContext(IngredientsContext);
 
-  const [bunIngredient, setBunIngredient] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
   // Стейты для оформления заказа
@@ -38,25 +26,25 @@ export default function BurgerConstructor() {
   const [numberOrder, setNumberOrder] = useState(null);
   const [error, setError] = useState();
 
-  const [finalSumState, finalSumDispatch] = useReducer(
-    finalSumReducer,
-    initialState
-  );
-
-  // Запись в стейт ингредиентов и булки
-  useEffect(() => {
-     setBunIngredient(getBunIngredient(dataIngredients));
-     setIngredients(getRandomIngredients(dataIngredients));
+  const { bunIngredient, ingredients } = useMemo(() => {
+    return {
+      bunIngredient: dataIngredients.filter(item => item.type === 'bun').sort(() => Math.random() - Math.random()).slice(0, 1),
+      ingredients: dataIngredients.filter(item => item.type !== 'bun').sort(() => Math.random() - Math.random()).slice(0, 5),
+    };
   }, [dataIngredients]);
-
+  
   // Результирующая сумма
-  useEffect(() => {
-      ingredients.map(ingredient => {
-        finalSumDispatch({ type: "ingredient", payload: ingredient });
-      });
-      bunIngredient.map(bun => {
-        finalSumDispatch({ type: "bun", payload: bun });
-      });
+  // Убирала StrictMode потому что он создавал проблемы при подсчете суммы заказа. 
+  // Если оставлять StrictMode, то корректо считать получается только локально
+  const finalSum = useMemo(() => {
+    let sum = 0;
+    ingredients.forEach(ingredient => {
+      sum += ingredient.price;
+    });
+    bunIngredient.forEach(bun => {
+      sum += bun.price * 2;
+    });
+    return sum;
   }, [ingredients, bunIngredient]);
 
   // Если нажали на кнопку "оформить" и номер заказа пустой, то выполнить запрос
@@ -64,19 +52,7 @@ export default function BurgerConstructor() {
     if(order && !numberOrder) {
       sendOrder(allIngredients);
     }
-  }, [allIngredients])
-
-  // Получить рандомную булку
-  function getBunIngredient(data) {
-    const randomBunIngredients = data.filter(({ type }) => type === 'bun').sort(() => Math.random() - Math.random()).slice(0, 1);
-    return randomBunIngredients;
-  }
-
-  // Получить 5 рандомных ингредиентов
-  function getRandomIngredients(data) {
-    const randomIngredients = data.filter(({ type }) => type !== 'bun');
-    return randomIngredients.sort(() => Math.random() - Math.random()).slice(0, 5);
-  }
+  }, [allIngredients]);
 
   // Клик по кнопке "Оформить"
   function onBtnClick() {
@@ -84,13 +60,13 @@ export default function BurgerConstructor() {
       return ingredient._id });
     const idBun = bunIngredient.map(bun => {
         return bun._id });
-    setAllIngredients(idIngedients.concat(idBun, idBun));
+    setAllIngredients(allIngredients.concat(idBun, idIngedients, idBun));
     setOrder(true);
     setModalOpen(!modalOpen);
   }
 
   const sendOrder = async () => {
-    return fetch("https://norma.nomoreparties.space/api/orders", {
+    return fetch(`${API_URL}/orders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
@@ -109,7 +85,6 @@ export default function BurgerConstructor() {
       setError(e);
     });
 }
-
 
   return (
     <>
@@ -131,7 +106,7 @@ export default function BurgerConstructor() {
 
       <div className={style.finalSum}>
         <p>
-          {finalSumState.finalSum}
+          {finalSum}
           <span className={style.finalSum_icon}>
             <CurrencyIcon type="primary" />
           </span>

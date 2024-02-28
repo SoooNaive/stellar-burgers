@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { DataType } from '../app/utils/data-type';
+import React, { useRef, useEffect } from 'react';
+import { DataType } from '../utils/data-type';
 import {
   CurrencyIcon,
   Counter,
@@ -10,10 +11,21 @@ export default function IngredientCard({
   ingredients,
   typeTitle,
   onIngredientClick,
+  type,
+  current
 }) {
+  const typesRefs = {
+    main: useRef(),
+    bun: useRef(),
+    sauce: useRef(),
+  };
+  useEffect(() => {
+    typesRefs[current].current?.scrollIntoView();
+  }, [current]);
+  
   return (
     <>
-      <p className={style.title_card}>{typeTitle}</p>
+      <p className={style.title_card} ref={typesRefs[type]}>{typeTitle}</p>
       <div className={style.container_card}>
         {ingredients.map((ingredient) => (
           <div
@@ -44,4 +56,6 @@ IngredientCard.propTypes = {
   ingredients: PropTypes.arrayOf(DataType).isRequired,
   onIngredientClick: PropTypes.func.isRequired,
   typeTitle: PropTypes.string,
+  type: PropTypes.string,
+  current: PropTypes.string,
 };
