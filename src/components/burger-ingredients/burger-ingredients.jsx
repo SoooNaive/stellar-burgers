@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { DataType } from '../app/utils/data-type';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from './ingredient-card';
+import IngredientsContext from "../../services/ingredients-context";
 
 const ingredientsTypes = {
   main: 'Начинки',
@@ -18,14 +17,18 @@ const tabs = ['bun', 'sauce', 'main'].map((type) => ({
   title: ingredientsTypes[type],
 }));
 
-export default function BurgerIngredients({ dataIngredients }) {
+export default function BurgerIngredients() {
   const [current, setCurrent] = useState('bun');
   const [listIngredients, setListIngredients] = useState([]);
   const [ingredientDetails, setIngredientDetails] = useState();
 
+  const dataIngredients = useContext(IngredientsContext);
+
+
   useEffect(() => {
     setListIngredients(getDataList(dataIngredients));
   }, [dataIngredients]);
+  
 
   function onTabClick(current) {
     setCurrent(current);
@@ -45,6 +48,7 @@ export default function BurgerIngredients({ dataIngredients }) {
       typesGroupIngredients.set(ingredient.type, typeIngredients);
     }
     return Array.from(typesGroupIngredients).map(([type, typeIngredients]) => ({
+      type: type,
       typeTitle: ingredientsTypes[type],
       ingredients: typeIngredients,
     }));
@@ -67,12 +71,14 @@ export default function BurgerIngredients({ dataIngredients }) {
           ))}
         </div>
         <div className={style.container_cards}>
-          {listIngredients.map(({ typeTitle, ingredients }) => (
+          {listIngredients.map(({ typeTitle, ingredients, type }) => (
             <IngredientCard
               key={typeTitle}
               ingredients={ingredients}
               typeTitle={typeTitle}
               onIngredientClick={onIngredientClick}
+              type={type}
+              current={current}
             />
           ))}
         </div>
@@ -85,6 +91,3 @@ export default function BurgerIngredients({ dataIngredients }) {
     </>
   );
 }
-BurgerIngredients.propTypes = {
-  dataIngredients: PropTypes.arrayOf(DataType).isRequired,
-};

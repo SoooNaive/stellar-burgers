@@ -4,21 +4,21 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor.module.css';
 import PropTypes from "prop-types";
-import { DataType } from '../app/utils/data-type';
-export default function BurgerElement({ data, type, isLocked }) {
- 
+import { DataType } from '../../utils/data-type';
+export default function BurgerElement({ data, isLocked }) {
+
+
   return (
     <>
       <div className={style.ingredient}>
         <div className={style.icon}>
-          {!type && <DragIcon type="primary" />}
+          <DragIcon type="primary" />
         </div>
         <ConstructorElement
           text={data.name}
           thumbnail={data.image_mobile}
           price={data.price}
           isLocked={isLocked}
-          type={type}
         />
       </div>
     </>
@@ -26,6 +26,5 @@ export default function BurgerElement({ data, type, isLocked }) {
 }
 BurgerElement.propTypes = {
   data: PropTypes.oneOfType([DataType, PropTypes.arrayOf(DataType)]),
-  type: PropTypes.string,
   isLocked: PropTypes.bool,
 };

@@ -1,53 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from "prop-types";
-import { DataType } from "../app/utils/data-type";
+import { useEffect, useState, useContext, useMemo } from 'react';
 import {
   Button,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor.module.css';
 import BurgerElement from './burger-element.jsx';
+import BurgerElementBun from './burger-element-bun.jsx';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
+import IngredientsContext from "../../services/ingredients-context";
+import { BURGER_API_URL } from '../../utils/burger-api.js'
 
-export default function BurgerConstructor({ dataIngredients }) {
-  const [bunIngredient, setBunIngredient] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
-  const [finalSum, setFinalSum] = useState();
+
+
+export default function BurgerConstructor() {
+
+  const dataIngredients = useContext(IngredientsContext);
+
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-     setBunIngredient(getBunIngredient(dataIngredients));
-     setIngredients(getRandomIngredients(dataIngredients));
+  // Стейты для оформления заказа
+  const [order, setOrder] = useState(false);
+  const [allIngredients, setAllIngredients] = useState([]);
+  const [numberOrder, setNumberOrder] = useState(null);
+  const [error, setError] = useState();
+
+  const { bunIngredient, ingredients } = useMemo(() => {
+    return {
+      bunIngredient: dataIngredients.filter(item => item.type === 'bun').sort(() => Math.random() - Math.random()).slice(0, 1),
+      ingredients: dataIngredients.filter(item => item.type !== 'bun').sort(() => Math.random() - Math.random()).slice(0, 5),
+    };
   }, [dataIngredients]);
-
-
-  useEffect(() => {
-     setFinalSum(getFinalSum(ingredients, bunIngredient));
+  
+  // Результирующая сумма
+  const finalSum = useMemo(() => {
+    let sum = 0;
+    ingredients.forEach(ingredient => {
+      sum += ingredient.price;
+    });
+    bunIngredient.forEach(bun => {
+      sum += bun.price * 2;
+    });
+    return sum;
   }, [ingredients, bunIngredient]);
 
-  function getBunIngredient(data) {
-    return data.find(({ type }) => type === 'bun');
-  }
+  // Если нажали на кнопку "оформить" и номер заказа пустой, то выполнить запрос
+  useEffect(() => {
+    if(order && !numberOrder) {
+      sendOrder(allIngredients);
+    }
+  }, [allIngredients]);
 
-  function getRandomIngredients(data) {
-    const randomIngredients = data.filter(({ type }) => type !== 'bun');
-    return randomIngredients.sort(() => Math.random() - Math.random()).slice(0, 5);
-  }
-  function getFinalSum(otherIngredients, bun) {
-    const sumBun = bun.price;
-    const sum = (otherIngredients.map(ingredient => ingredient.price).reduce((prev, curr) => prev + curr, 0) + 2 * sumBun);
-    return sum;
-  }
-
+  // Клик по кнопке "Оформить"
   function onBtnClick() {
+    const idIngedients = ingredients.map(ingredient => {
+      return ingredient._id });
+    const idBun = bunIngredient.map(bun => {
+        return bun._id });
+    setAllIngredients(allIngredients.concat(idBun, idIngedients, idBun));
+    setOrder(true);
     setModalOpen(!modalOpen);
   }
+
+  const sendOrder = async () => {
+    return fetch(`${BURGER_API_URL}/orders`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify({
+            "ingredients": allIngredients
+        })
+    })
+    .then((response) => {
+      return response.ok ? response.json() : setNumberOrder({ ...numberOrder })
+    })
+    .then((number) => {
+      setNumberOrder(number.order.number);
+      })
+    .catch(e => {
+      setError(e);
+    });
+}
 
   return (
     <>
       <div className={style.burger_constructor}>
-        <BurgerElement data={bunIngredient} type={'top'} isLocked={true}/>
+        <BurgerElementBun data={bunIngredient} type={'top'} isLocked={true} top={true}/>
         <div className={style.scroll}>
           <div className={style.all_ingredients}>
             {ingredients.map((ingredient) => (
@@ -59,7 +98,7 @@ export default function BurgerConstructor({ dataIngredients }) {
             ))}
           </div>
         </div>
-          <BurgerElement data={bunIngredient} type={'bottom'} isLocked={true} />
+          <BurgerElementBun data={bunIngredient} type={'bottom'} isLocked={true} top={false}/>
       </div>
 
       <div className={style.finalSum}>
@@ -81,12 +120,9 @@ export default function BurgerConstructor({ dataIngredients }) {
       </div>
       {modalOpen && (
         <Modal onClose={() => onBtnClick()}>
-          <OrderDetails />
+          <OrderDetails numberOrder={numberOrder} error={error} />
         </Modal>
       )}
     </>
   );
 }
-BurgerConstructor.propTypes = {
-  dataIngredients: PropTypes.arrayOf(DataType).isRequired
-};

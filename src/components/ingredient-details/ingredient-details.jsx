@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { DataType } from "../app/utils/data-type";
+import { DataType } from "../../utils/data-type";
 import style from "./ingredient-details.module.css";
 
 export default function IngredientDetails({ingredient}) {
