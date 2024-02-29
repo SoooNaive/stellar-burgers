@@ -4,7 +4,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import style from './burger-constructor.module.css';
 import PropTypes from "prop-types";
-import { DataType } from '../utils/data-type';
+import { DataType } from '../../utils/data-type';
 export default function BurgerElement({ data, isLocked }) {
 
 

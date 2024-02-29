@@ -8,11 +8,10 @@ import BurgerElement from './burger-element.jsx';
 import BurgerElementBun from './burger-element-bun.jsx';
 import OrderDetails from "../order-details/order-details";
 import Modal from "../modal/modal";
-import IngredientsContext from "../services/ingredients-context";
-import { getData } from '../utils/data';
+import IngredientsContext from "../../services/ingredients-context";
+import { BURGER_API_URL } from '../../utils/burger-api.js'
 
 
-const API_URL = getData();
 
 export default function BurgerConstructor() {
 
@@ -34,8 +33,6 @@ export default function BurgerConstructor() {
   }, [dataIngredients]);
   
   // Результирующая сумма
-  // Убирала StrictMode потому что он создавал проблемы при подсчете суммы заказа. 
-  // Если оставлять StrictMode, то корректо считать получается только локально
   const finalSum = useMemo(() => {
     let sum = 0;
     ingredients.forEach(ingredient => {
@@ -66,7 +63,7 @@ export default function BurgerConstructor() {
   }
 
   const sendOrder = async () => {
-    return fetch(`${API_URL}/orders`, {
+    return fetch(`${BURGER_API_URL}/orders`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'

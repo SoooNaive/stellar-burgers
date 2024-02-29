@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useRef, useEffect } from 'react';
-import { DataType } from '../utils/data-type';
+import { DataType } from '../../utils/data-type';
 import {
   CurrencyIcon,
   Counter,

@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import styleApp from './app.module.css';
-import { getData } from '../utils/data';
+import { BURGER_API_URL } from '../../utils/burger-api.js'
 import AppHeader from '../app-header/app-header.jsx';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
-import IngredientsContext from "../services/ingredients-context";
+import IngredientsContext from "../../services/ingredients-context";
 
 
 function App() {
-
-  const API_URL = getData();
 
   const [ingredients, setIngredients] =  useState({data: [], success: false});
   const [error, setError] = useState();
@@ -17,7 +15,7 @@ function App() {
 
   useEffect(() => {
     const getIngregients = async () => {
-      return fetch(`${API_URL}/ingredients`)
+      return fetch(`${BURGER_API_URL}/ingredients`)
             .then((response) => {
               return response.ok ? response.json() : setIngredients({ ...ingredients, success: false });
             })

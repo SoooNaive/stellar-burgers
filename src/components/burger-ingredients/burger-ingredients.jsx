@@ -4,7 +4,7 @@ import style from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from './ingredient-card';
-import IngredientsContext from "../services/ingredients-context";
+import IngredientsContext from "../../services/ingredients-context";
 
 const ingredientsTypes = {
   main: 'Начинки',
