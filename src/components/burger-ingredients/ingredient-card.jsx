@@ -54,7 +54,7 @@ export default function IngredientCard({
 }
 IngredientCard.propTypes = {
   ingredients: PropTypes.arrayOf(DataType).isRequired,
-  onIngredientClick: PropTypes.func.isRequired,
+  // onIngredientClick: PropTypes.func.isRequired,
   typeTitle: PropTypes.string,
   type: PropTypes.string,
   current: PropTypes.string,
