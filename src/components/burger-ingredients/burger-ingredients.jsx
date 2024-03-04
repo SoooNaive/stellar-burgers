@@ -4,9 +4,12 @@ import style from './burger-ingredients.module.css';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from './ingredient-card';
-import IngredientsContext from "../../services/ingredients-context";
+import IngredientsContext from '../../services/ingredients-context';
 
-import { openIngredientDetails, closeIngredientDetails } from "../../services/ingredient-details";
+import {
+  openIngredientDetails,
+  closeIngredientDetails,
+} from '../../services/ingredient-details';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -22,27 +25,20 @@ const tabs = ['bun', 'sauce', 'main'].map((type) => ({
 }));
 
 export default function BurgerIngredients() {
-
   const dispatch = useDispatch();
-  const ingredients = useSelector(state => state.ingredientsState.ingredients.data);
-  const modal = useSelector(state => state.ingredientDetails.isOpened);
+  const ingredients = useSelector(
+    (state) => state.ingredientsState.ingredients.data
+  );
+  const modal = useSelector((state) => state.ingredientDetails.isOpened);
 
   const [current, setCurrent] = useState('bun');
   const [listIngredients, setListIngredients] = useState([]);
 
-
-
-
-
-
-  // const [ingredientDetails, setIngredientDetails] = useState(); 
-
-
+  // const [ingredientDetails, setIngredientDetails] = useState();
 
   useEffect(() => {
     setListIngredients(getDataList(ingredients));
   }, [ingredients]);
-  
 
   function onTabClick(current) {
     setCurrent(current);
@@ -50,8 +46,8 @@ export default function BurgerIngredients() {
 
   function onIngredientClick(ingredient) {
     if (!modal) {
-      dispatch(openIngredientDetails());
-      console.log(ingredient)
+      dispatch(openIngredientDetails(ingredient));
+      console.log(ingredient);
     } else {
       dispatch(closeIngredientDetails());
     }
@@ -78,7 +74,6 @@ export default function BurgerIngredients() {
 
   return (
     <>
-     
       <div className={style.container_burgerIngredients}>
         <p className={style.title_cards}>Соберите бургер</p>
         <div className={style.burger_tabs}>
@@ -93,7 +88,7 @@ export default function BurgerIngredients() {
             </Tab>
           ))}
         </div>
-          <div className={style.container_cards}>
+        <div className={style.container_cards}>
           {listIngredients.map(({ typeTitle, ingredients, type }) => (
             <IngredientCard
               key={typeTitle}

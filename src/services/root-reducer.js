@@ -1,10 +1,12 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 import { ingredientsReducer } from './ingredients';
-import {modalIngredientsReducer} from './ingredient-details'
+import { modalIngredientsReducer } from './ingredient-details';
+import { burgerConstructorReducer } from './burger-constructor';
 
 export const rootReducer = combineReducers({
-    ingredientsState: ingredientsReducer,
-    ingredientDetails: modalIngredientsReducer,
+  ingredientsState: ingredientsReducer,
+  ingredientDetails: modalIngredientsReducer,
+  burgerConstructorState: burgerConstructorReducer,
 });
 
 export default rootReducer;
