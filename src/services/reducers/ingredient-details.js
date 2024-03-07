@@ -19,6 +19,5 @@ export const modalIngredientDetails = createSlice({
     },
   },
 });
-export const { openIngredientDetails, closeIngredientDetails } =
-  modalIngredientDetails.actions;
+export const { openIngredientDetails, closeIngredientDetails } = modalIngredientDetails.actions;
 export const modalIngredientsReducer = modalIngredientDetails.reducer;

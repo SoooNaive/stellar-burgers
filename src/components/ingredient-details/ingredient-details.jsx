@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
-import { DataType } from '../../utils/data-type';
+import { useSelector } from 'react-redux';
+
 import style from './ingredient-details.module.css';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function IngredientDetails() {
   const ingredient = useSelector((state) => state.ingredientDetails.details);
@@ -30,6 +29,3 @@ export default function IngredientDetails() {
   );
 }
 
-IngredientDetails.propTypes = {
-  ingredient: DataType,
-};
