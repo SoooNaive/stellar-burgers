@@ -12,7 +12,6 @@ export default function IngredientDetails() {
   ];
 
   return (
-    <>
       <div className={style.container_details}>
         <img src={ingredient.image_large} alt={ingredient.name} />
         <p className={style.details_name}>{ingredient.name}</p>
@@ -25,7 +24,6 @@ export default function IngredientDetails() {
           ))}
         </div>
       </div>
-    </>
   );
 }
 

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { BURGER_API_URL } from '../../utils/burger-api';
+import { checkResponse } from '../../utils/check-response';
 
 const initialState = {
     number: null,
@@ -20,9 +21,7 @@ export const sendOrder = (allIngredients) => {
             "ingredients": allIngredients
           })
         })
-        .then((response) => {
-            return response.ok ? response.json() : Promise.reject(`Ошибка ${response.status}`)
-        })
+        .then(checkResponse)
         .then((data) => {
             dispatch(fetchUsersSuccess(data.order.number));
         })

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { BURGER_API_URL } from '../../utils/burger-api';
+import { checkResponse } from '../../utils/check-response';
 
 const initialState = {
   ingredients: [],
@@ -7,14 +8,11 @@ const initialState = {
   isLoading: false,
 };
 
-export const getIngredients = createAsyncThunk(
-  'ingredientsData',
-  async function(_, { dispatch }) {
+export const getIngredients = () => {
+  return async (dispatch) => {
     dispatch(fetchUsersRequest());
     return fetch(`${BURGER_API_URL}/ingredients`)
-    .then((response) => {
-      return response.ok ? response.json() : Promise.reject(`Ошибка ${response.status}`);
-    })
+    .then(checkResponse)
     .then((data) => {
       dispatch(fetchUsersSuccess(data));
     })
@@ -22,7 +20,7 @@ export const getIngredients = createAsyncThunk(
       dispatch(fetchUsersFailure(error.message));
     })
   }
-)
+}
 
 export const ingredientsData = createSlice({
   name: 'ingredients',
