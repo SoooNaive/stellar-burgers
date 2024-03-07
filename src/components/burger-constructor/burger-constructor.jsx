@@ -2,11 +2,18 @@ import { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { Button, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import {
+  Button,
+  CurrencyIcon,
+} from '@ya.praktikum/react-developer-burger-ui-components';
 
-import { sendOrder, closeModalOrder, openModalOrder } from '../../services/reducers/order';
+import {
+  sendOrder,
+  closeModalOrder,
+  openModalOrder,
+} from '../../services/reducers/order';
 
 import { openOrderModal } from '../../services/reducers/burger-constructor';
 
@@ -15,28 +22,29 @@ import BurgerElement from './burger-element.jsx';
 import BurgerElementBun from './burger-element-bun.jsx';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
+import { addIngredient } from '../../services/reducers/burger-constructor';
 
-export default function BurgerConstructor({ondropHeandler}) {
-
+export default function BurgerConstructor() {
   const dispatch = useDispatch();
 
+  const ondropHeandler = (ingredient) => {
+    dispatch(addIngredient(ingredient));
+  };
   const ingredients = useSelector(
     (state) => state.burgerConstructorState.ingredients
   );
-  const bun = useSelector(
-    (state) => state.burgerConstructorState.bun
-  );
+  const bun = useSelector((state) => state.burgerConstructorState.bun);
   const modal = useSelector((state) => state.modalOrderState.isOpened);
 
   const [, dropRef] = useDrop({
-    accept: "ingredient",
+    accept: 'ingredient',
     drop(itemId) {
       ondropHeandler(itemId);
-    }
-  })
+    },
+  });
   const finalSum = useMemo(() => {
     let sum = 0;
-    ingredients.forEach(ingredient => {
+    ingredients.forEach((ingredient) => {
       sum += ingredient.price;
     });
     sum += bun?.price * 2;
@@ -45,7 +53,7 @@ export default function BurgerConstructor({ondropHeandler}) {
 
   const onClickOrder = () => {
     let allIngredients = [];
-    const idIngedients = ingredients?.map(ingredient => {
+    const idIngedients = ingredients?.map((ingredient) => {
       return ingredient._id;
     });
     const idBun = bun?._id;
@@ -57,19 +65,18 @@ export default function BurgerConstructor({ondropHeandler}) {
     } else {
       dispatch(closeModalOrder());
     }
-  }
+  };
 
-  
   return (
     <>
       <div className={style.burger_constructor} ref={dropRef}>
-        <BurgerElementBun data={bun} type={'top'} isLocked={true} top={true}/>
+        <BurgerElementBun data={bun} type={'top'} isLocked={true} top={true} />
         <div className={style.scroll}>
-          {ingredients.length ? ( 
-            <div className={style.all_ingredients} >
+          {ingredients.length ? (
+            <div className={style.all_ingredients}>
               {ingredients.map((ingredient, index) => (
                 <BurgerElement
-                  key={index}
+                  key={ingredient.uuid}
                   data={ingredient}
                   isLocked={false}
                   index={index}
@@ -78,17 +85,22 @@ export default function BurgerConstructor({ondropHeandler}) {
               ))}
             </div>
           ) : (
-              <div className={style.emptyBlock}>
-                <span className={style.emptyText}>
-                  Перенесите сюда ингредиент
-                </span>
-              </div>
+            <div className={style.emptyBlock}>
+              <span className={style.emptyText}>
+                Перенесите сюда ингредиент
+              </span>
+            </div>
           )}
         </div>
-        <BurgerElementBun data={bun} type={'bottom'} isLocked={true} top={false}/>
+        <BurgerElementBun
+          data={bun}
+          type={'bottom'}
+          isLocked={true}
+          top={false}
+        />
       </div>
       <div className={style.finalSum}>
-       <p>
+        <p>
           {finalSum}
           <span className={style.finalSum_icon}>
             <CurrencyIcon type="primary" />

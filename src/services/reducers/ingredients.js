@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { BURGER_API_URL } from '../../utils/burger-api';
 import { checkResponse } from '../../utils/check-response';
 
@@ -12,15 +12,15 @@ export const getIngredients = () => {
   return async (dispatch) => {
     dispatch(fetchUsersRequest());
     return fetch(`${BURGER_API_URL}/ingredients`)
-    .then(checkResponse)
-    .then((data) => {
-      dispatch(fetchUsersSuccess(data));
-    })
-    .catch((error) => {
-      dispatch(fetchUsersFailure(error.message));
-    })
-  }
-}
+      .then(checkResponse)
+      .then((data) => {
+        dispatch(fetchUsersSuccess(data));
+      })
+      .catch((error) => {
+        dispatch(fetchUsersFailure(error.message));
+      });
+  };
+};
 
 export const ingredientsData = createSlice({
   name: 'ingredients',
@@ -38,8 +38,9 @@ export const ingredientsData = createSlice({
       state.error = action.payload;
     },
   },
-})
+});
 
-export const { fetchUsersRequest, fetchUsersSuccess, fetchUsersFailure } = ingredientsData.actions;
+export const { fetchUsersRequest, fetchUsersSuccess, fetchUsersFailure } =
+  ingredientsData.actions;
 
-export const ingredientsReducer =  ingredientsData.reducer;
+export const ingredientsReducer = ingredientsData.reducer;

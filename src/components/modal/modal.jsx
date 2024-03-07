@@ -11,17 +11,16 @@ const modal = document.getElementById('react-modals');
 
 export default function Modal({ onClose, children, header }) {
   useEffect(() => {
+    const onPressEsc = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
     document.addEventListener('keyup', onPressEsc);
     return () => {
       document.removeEventListener('keyup', onPressEsc);
     };
   }, [onClose]);
-
-  function onPressEsc(e) {
-    if (e.key === 'Escape') {
-      onClose();
-    }
-  }
 
   return ReactDOM.createPortal(
     <>

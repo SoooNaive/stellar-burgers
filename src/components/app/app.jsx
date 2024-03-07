@@ -6,23 +6,24 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getIngredients } from '../../services/reducers/ingredients';
-import { addIngredient } from '../../services/reducers/burger-constructor';
 
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-function App() {
+// import { nanoid } from 'nanoid';
 
+function App() {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.error);
 
   useEffect(() => {
     dispatch(getIngredients());
-  }, [dispatch]); 
+  }, [dispatch]);
 
-  const ondropHeandler = (ingredient) => {
-    dispatch(addIngredient(ingredient))
-  }
+  // const ondropHeandler = (ingredient) => {
+  //   // ingredient = { ...ingredient, nanoid: nanoid() };
+  //   dispatch(addIngredient(ingredient));
+  // };
 
   return (
     <>
@@ -39,7 +40,7 @@ function App() {
               <BurgerIngredients />
             </div>
             <div className={styleApp.container_cunstructor}>
-              <BurgerConstructor  ondropHeandler={ondropHeandler}/>
+              <BurgerConstructor />
             </div>
           </DndProvider>
         </main>
