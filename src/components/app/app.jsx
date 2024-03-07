@@ -10,8 +10,6 @@ import { getIngredients } from '../../services/reducers/ingredients';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-// import { nanoid } from 'nanoid';
-
 function App() {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.error);
@@ -19,11 +17,6 @@ function App() {
   useEffect(() => {
     dispatch(getIngredients());
   }, [dispatch]);
-
-  // const ondropHeandler = (ingredient) => {
-  //   // ingredient = { ...ingredient, nanoid: nanoid() };
-  //   dispatch(addIngredient(ingredient));
-  // };
 
   return (
     <>
