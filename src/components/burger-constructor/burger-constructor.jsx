@@ -1,106 +1,104 @@
-import { useEffect, useState, useContext, useMemo } from 'react';
+import { useMemo } from 'react';
+import { useDrop } from 'react-dnd';
+import { useDispatch, useSelector } from 'react-redux';
+
+import PropTypes from 'prop-types';
+
 import {
   Button,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
+
+import {
+  sendOrder,
+  closeModalOrder,
+  openModalOrder,
+} from '../../services/reducers/order';
+
+import { openOrderModal } from '../../services/reducers/burger-constructor';
+
 import style from './burger-constructor.module.css';
 import BurgerElement from './burger-element.jsx';
 import BurgerElementBun from './burger-element-bun.jsx';
-import OrderDetails from "../order-details/order-details";
-import Modal from "../modal/modal";
-import IngredientsContext from "../../services/ingredients-context";
-import { BURGER_API_URL } from '../../utils/burger-api.js'
-
-
+import OrderDetails from '../order-details/order-details';
+import Modal from '../modal/modal';
+import { addIngredient } from '../../services/reducers/burger-constructor';
 
 export default function BurgerConstructor() {
+  const dispatch = useDispatch();
 
-  const dataIngredients = useContext(IngredientsContext);
+  const ondropHeandler = (ingredient) => {
+    dispatch(addIngredient(ingredient));
+  };
+  const ingredients = useSelector(
+    (state) => state.burgerConstructorState.ingredients
+  );
+  const bun = useSelector((state) => state.burgerConstructorState.bun);
+  const modal = useSelector((state) => state.modalOrderState.isOpened);
 
-  const [modalOpen, setModalOpen] = useState(false);
-
-  // Стейты для оформления заказа
-  const [order, setOrder] = useState(false);
-  const [allIngredients, setAllIngredients] = useState([]);
-  const [numberOrder, setNumberOrder] = useState(null);
-  const [error, setError] = useState();
-
-  const { bunIngredient, ingredients } = useMemo(() => {
-    return {
-      bunIngredient: dataIngredients.filter(item => item.type === 'bun').sort(() => Math.random() - Math.random()).slice(0, 1),
-      ingredients: dataIngredients.filter(item => item.type !== 'bun').sort(() => Math.random() - Math.random()).slice(0, 5),
-    };
-  }, [dataIngredients]);
-  
-  // Результирующая сумма
+  const [, dropRef] = useDrop({
+    accept: 'ingredient',
+    drop(itemId) {
+      ondropHeandler(itemId);
+    },
+  });
   const finalSum = useMemo(() => {
     let sum = 0;
-    ingredients.forEach(ingredient => {
+    ingredients.forEach((ingredient) => {
       sum += ingredient.price;
     });
-    bunIngredient.forEach(bun => {
-      sum += bun.price * 2;
-    });
+    sum += bun?.price * 2;
     return sum;
-  }, [ingredients, bunIngredient]);
+  }, [ingredients, bun]);
 
-  // Если нажали на кнопку "оформить" и номер заказа пустой, то выполнить запрос
-  useEffect(() => {
-    if(order && !numberOrder) {
-      sendOrder(allIngredients);
-    }
-  }, [allIngredients]);
-
-  // Клик по кнопке "Оформить"
-  function onBtnClick() {
-    const idIngedients = ingredients.map(ingredient => {
-      return ingredient._id });
-    const idBun = bunIngredient.map(bun => {
-        return bun._id });
-    setAllIngredients(allIngredients.concat(idBun, idIngedients, idBun));
-    setOrder(true);
-    setModalOpen(!modalOpen);
-  }
-
-  const sendOrder = async () => {
-    return fetch(`${BURGER_API_URL}/orders`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify({
-            "ingredients": allIngredients
-        })
-    })
-    .then((response) => {
-      return response.ok ? response.json() : setNumberOrder({ ...numberOrder })
-    })
-    .then((number) => {
-      setNumberOrder(number.order.number);
-      })
-    .catch(e => {
-      setError(e);
+  const onClickOrder = () => {
+    let allIngredients = [];
+    const idIngedients = ingredients?.map((ingredient) => {
+      return ingredient._id;
     });
-}
+    const idBun = bun?._id;
+    allIngredients = allIngredients.concat(idBun, idIngedients, idBun);
+    if (!modal) {
+      dispatch(sendOrder(allIngredients));
+      dispatch(openModalOrder(allIngredients));
+      dispatch(openOrderModal());
+    } else {
+      dispatch(closeModalOrder());
+    }
+  };
 
   return (
     <>
-      <div className={style.burger_constructor}>
-        <BurgerElementBun data={bunIngredient} type={'top'} isLocked={true} top={true}/>
+      <div className={style.burger_constructor} ref={dropRef}>
+        <BurgerElementBun data={bun} type={'top'} isLocked={true} top={true} />
         <div className={style.scroll}>
-          <div className={style.all_ingredients}>
-            {ingredients.map((ingredient) => (
+          {ingredients.length ? (
+            <div className={style.all_ingredients}>
+              {ingredients.map((ingredient, index) => (
                 <BurgerElement
-                  key={ingredient._id}
+                  key={ingredient.uuid}
                   data={ingredient}
                   isLocked={false}
+                  index={index}
+                  id={ingredient._id}
                 />
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className={style.emptyBlock}>
+              <span className={style.emptyText}>
+                Перенесите сюда ингредиент
+              </span>
+            </div>
+          )}
         </div>
-          <BurgerElementBun data={bunIngredient} type={'bottom'} isLocked={true} top={false}/>
+        <BurgerElementBun
+          data={bun}
+          type={'bottom'}
+          isLocked={true}
+          top={false}
+        />
       </div>
-
       <div className={style.finalSum}>
         <p>
           {finalSum}
@@ -113,16 +111,19 @@ export default function BurgerConstructor() {
           type="primary"
           size="large"
           extraClass="ml-10"
-          onClick={onBtnClick}
+          onClick={onClickOrder}
         >
           Оформить заказ
         </Button>
       </div>
-      {modalOpen && (
-        <Modal onClose={() => onBtnClick()}>
-          <OrderDetails numberOrder={numberOrder} error={error} />
+      {modal && (
+        <Modal onClose={() => onClickOrder()}>
+          <OrderDetails />
         </Modal>
       )}
     </>
   );
 }
+BurgerConstructor.propTypes = {
+  ondropHeandler: PropTypes.func,
+};

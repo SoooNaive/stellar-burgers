@@ -1,8 +1,11 @@
+import { useSelector } from 'react-redux';
+
 import style from './order-details.module.css';
 import image from '../../images/image.png';
-import PropTypes from "prop-types";
 
-export default function OrderDetails( {numberOrder, error} ) {
+export default function OrderDetails() {
+  const numberOrder = useSelector((state) => state.modalOrderState.number);
+  const error = useSelector((state) => state.modalOrderState.error);
   return (
     <>
       {error && 
@@ -24,8 +27,3 @@ export default function OrderDetails( {numberOrder, error} ) {
     </>
   );
 }
-
-OrderDetails.propTypes = {
-  numberOrder: PropTypes.number,
-  error: PropTypes.object,
-};

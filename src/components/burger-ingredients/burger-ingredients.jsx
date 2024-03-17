@@ -1,10 +1,15 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import { useEffect, useState,  useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import style from './burger-ingredients.module.css';
+
 import Modal from '../modal/modal';
+
+import { openIngredientDetails, closeIngredientDetails } from '../../services/reducers/ingredient-details';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from './ingredient-card';
-import IngredientsContext from "../../services/ingredients-context";
+
+import style from './burger-ingredients.module.css';
 
 const ingredientsTypes = {
   main: 'Начинки',
@@ -18,29 +23,70 @@ const tabs = ['bun', 'sauce', 'main'].map((type) => ({
 }));
 
 export default function BurgerIngredients() {
+  const dispatch = useDispatch();
+  const ingredients = useSelector(
+    (state) => state.ingredientsState.ingredients.data
+  );
+
+  const modal = useSelector((state) => state.ingredientDetails.isOpened);
+
   const [current, setCurrent] = useState('bun');
+
   const [listIngredients, setListIngredients] = useState([]);
-  const [ingredientDetails, setIngredientDetails] = useState();
-
-  const dataIngredients = useContext(IngredientsContext);
-
 
   useEffect(() => {
-    setListIngredients(getDataList(dataIngredients));
-  }, [dataIngredients]);
-  
+    setListIngredients(getDataList(ingredients));
+  }, [ingredients]);
 
   function onTabClick(current) {
     setCurrent(current);
+    typesRefs[current].current?.scrollIntoView();
   }
 
+  const typesRefs = {
+    main: useRef(),
+    bun: useRef(),
+    sauce: useRef(),
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const container = document.querySelector('.scroll');
+      const titles = container.querySelectorAll('h2');
+      let closestTitle = null;
+      let closestDistance = Infinity;
+      titles.forEach(title => {
+        const rect = title.getBoundingClientRect();
+        const distance = Math.abs(rect.left) + Math.abs(rect.top);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestTitle = title;
+        }
+      });
+      if (closestTitle) {
+        setCurrent(Object.keys(ingredientsTypes).find(key => ingredientsTypes[key] === closestTitle.innerText));
+      }
+    };
+    const container = document.querySelector('.scroll');
+    container.addEventListener('scroll', handleScroll);
+    return () => {
+        container.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   function onIngredientClick(ingredient) {
-    setIngredientDetails(ingredient);
+    if (!modal) {
+      dispatch(openIngredientDetails(ingredient));
+    } else {
+      dispatch(closeIngredientDetails());
+    }
   }
 
   function getDataList(data) {
+    if (!data) {
+      return [];
+    }
     const typesGroupIngredients = new Map();
-
     for (let i = 0; i < data.length; i++) {
       const ingredient = data[i];
       const typeIngredients = typesGroupIngredients.get(ingredient.type) || [];
@@ -70,22 +116,26 @@ export default function BurgerIngredients() {
             </Tab>
           ))}
         </div>
-        <div className={style.container_cards}>
+        <div className={`scroll ${style.container_cards}`}>
           {listIngredients.map(({ typeTitle, ingredients, type }) => (
-            <IngredientCard
-              key={typeTitle}
-              ingredients={ingredients}
-              typeTitle={typeTitle}
-              onIngredientClick={onIngredientClick}
-              type={type}
-              current={current}
-            />
+            <div key={typeTitle}>
+              <h2 className={style.title_card} ref={typesRefs[type]}>{typeTitle}</h2>
+              <div className={style.container_card}>
+                {ingredients.map((ingredient) => (
+                  <IngredientCard
+                    key={ingredient._id}
+                    ingredient={ingredient}
+                    onIngredientClick={onIngredientClick}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
-      {ingredientDetails && (
+      {modal && (
         <Modal header="Детали ингредиента" onClose={() => onIngredientClick()}>
-          <IngredientDetails ingredient={ingredientDetails} />
+          <IngredientDetails />
         </Modal>
       )}
     </>

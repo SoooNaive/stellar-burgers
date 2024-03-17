@@ -1,25 +1,26 @@
 import ReactDOM from 'react-dom';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import style from './modal.module.css';
+
 import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import ModalOverlay from '../modal-overlay/modal-overlay';
+
+import style from './modal.module.css';
 
 const modal = document.getElementById('react-modals');
 
 export default function Modal({ onClose, children, header }) {
   useEffect(() => {
+    const onPressEsc = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
     document.addEventListener('keyup', onPressEsc);
     return () => {
       document.removeEventListener('keyup', onPressEsc);
     };
   }, [onClose]);
-
-  function onPressEsc(e) {
-    if (e.key === 'Escape') {
-      onClose();
-    }
-  }
 
   return ReactDOM.createPortal(
     <>

@@ -13,11 +13,12 @@
   composes: mb-4 from global;
   display: inline-flex;
   align-items: center;
+  margin-left: 40px;
 
 }
 .burger_constructor > .ingredient:first-child,
 .burger_constructor > .ingredient:last-child {
-  margin-left: 24px;
+  margin-left: 64px;
 }
 .finalSum {
   composes: text text_type_digits-medium mr-2 from global;
@@ -32,4 +33,18 @@
 .scroll {
   min-height: 80px;
   overflow-y: overlay;
+}
+.emptyBlock {
+  composes: constructor-element from global;
+  max-height: 80px;
+  display: flex;
+  margin-left: 64px;
+  margin-bottom: 16px;
+  justify-content: center
+  
+}
+.emptyText {
+  composes: text text_type_main-default text_color_inactive from global;
+  display: inline-flex;
+  align-items: center;
 }
