@@ -2,8 +2,6 @@ import { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
-
 import {
   Button,
   CurrencyIcon,
@@ -16,13 +14,14 @@ import {
 } from '../../services/reducers/order';
 
 import { openOrderModal } from '../../services/reducers/burger-constructor';
+import { addIngredient } from '../../services/reducers/burger-constructor';
 
-import style from './burger-constructor.module.css';
 import BurgerElement from './burger-element.jsx';
 import BurgerElementBun from './burger-element-bun.jsx';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
-import { addIngredient } from '../../services/reducers/burger-constructor';
+
+import style from './burger-constructor.module.css';
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
@@ -35,6 +34,7 @@ export default function BurgerConstructor() {
   );
   const bun = useSelector((state) => state.burgerConstructorState.bun);
   const modal = useSelector((state) => state.modalOrderState.isOpened);
+  const userName = useSelector((state) => state.userState.userData.name);
 
   const [, dropRef] = useDrop({
     accept: 'ingredient',
@@ -99,19 +99,28 @@ export default function BurgerConstructor() {
           top={false}
         />
       </div>
+      {!userName && (
+        <div className={style.text_buttom}>
+          <p>Авторизуйтесь для оформления заказа</p>
+        </div>
+      )}
       <div className={style.finalSum}>
-        <p>
-          {finalSum}
-          <span className={style.finalSum_icon}>
-            <CurrencyIcon type="primary" />
-          </span>
-        </p>
+        {!isNaN(finalSum) && (
+          <p>
+            {finalSum}
+            <span className={style.finalSum_icon}>
+              <CurrencyIcon type="primary" />
+            </span>
+          </p>
+        )}
+
         <Button
           htmlType="button"
           type="primary"
           size="large"
           extraClass="ml-10"
           onClick={onClickOrder}
+          disabled={!ingredients.length || !bun || !userName}
         >
           Оформить заказ
         </Button>
@@ -124,6 +133,3 @@ export default function BurgerConstructor() {
     </>
   );
 }
-BurgerConstructor.propTypes = {
-  ondropHeandler: PropTypes.func,
-};

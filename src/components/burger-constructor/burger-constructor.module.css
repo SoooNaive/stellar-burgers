@@ -7,14 +7,12 @@
 .all_ingredients {
   display: flex;
   flex-direction: column;
-
 }
 .ingredient {
   composes: mb-4 from global;
   display: inline-flex;
   align-items: center;
   margin-left: 40px;
-
 }
 .burger_constructor > .ingredient:first-child,
 .burger_constructor > .ingredient:last-child {
@@ -40,11 +38,17 @@
   display: flex;
   margin-left: 64px;
   margin-bottom: 16px;
-  justify-content: center
-  
+  justify-content: center;
 }
 .emptyText {
   composes: text text_type_main-default text_color_inactive from global;
   display: inline-flex;
   align-items: center;
+}
+.text_buttom {
+  composes: text text_type_main-default text_color_inactive from global;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 8px;
 }

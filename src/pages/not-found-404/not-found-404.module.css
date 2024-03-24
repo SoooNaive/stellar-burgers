@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
+  justify-content: center;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 80px;
+}
+.content_text {
+  composes: mb-6 text text_type_main-medium from global;
+}
+.content_link {
+  composes: text text_type_main-small from global;
+  text-decoration: none;
+  color: #4c4cff;
+}

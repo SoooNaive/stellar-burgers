@@ -1,13 +1,11 @@
-import { useEffect, useState,  useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
-import Modal from '../modal/modal';
-
-import { openIngredientDetails, closeIngredientDetails } from '../../services/reducers/ingredient-details';
-import IngredientDetails from '../ingredient-details/ingredient-details';
 import IngredientCard from './ingredient-card';
+
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import style from './burger-ingredients.module.css';
 
@@ -23,12 +21,12 @@ const tabs = ['bun', 'sauce', 'main'].map((type) => ({
 }));
 
 export default function BurgerIngredients() {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  let location = useLocation();
+
   const ingredients = useSelector(
     (state) => state.ingredientsState.ingredients.data
   );
-
-  const modal = useSelector((state) => state.ingredientDetails.isOpened);
 
   const [current, setCurrent] = useState('bun');
 
@@ -55,7 +53,7 @@ export default function BurgerIngredients() {
       const titles = container.querySelectorAll('h2');
       let closestTitle = null;
       let closestDistance = Infinity;
-      titles.forEach(title => {
+      titles.forEach((title) => {
         const rect = title.getBoundingClientRect();
         const distance = Math.abs(rect.left) + Math.abs(rect.top);
         if (distance < closestDistance) {
@@ -64,22 +62,24 @@ export default function BurgerIngredients() {
         }
       });
       if (closestTitle) {
-        setCurrent(Object.keys(ingredientsTypes).find(key => ingredientsTypes[key] === closestTitle.innerText));
+        setCurrent(
+          Object.keys(ingredientsTypes).find(
+            (key) => ingredientsTypes[key] === closestTitle.innerText
+          )
+        );
       }
     };
     const container = document.querySelector('.scroll');
     container.addEventListener('scroll', handleScroll);
     return () => {
-        container.removeEventListener('scroll', handleScroll);
+      container.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   function onIngredientClick(ingredient) {
-    if (!modal) {
-      dispatch(openIngredientDetails(ingredient));
-    } else {
-      dispatch(closeIngredientDetails());
-    }
+    navigate(`ingredients/${ingredient._id}`, {
+      state: { backgroundLocation: location },
+    });
   }
 
   function getDataList(data) {
@@ -119,7 +119,9 @@ export default function BurgerIngredients() {
         <div className={`scroll ${style.container_cards}`}>
           {listIngredients.map(({ typeTitle, ingredients, type }) => (
             <div key={typeTitle}>
-              <h2 className={style.title_card} ref={typesRefs[type]}>{typeTitle}</h2>
+              <h2 className={style.title_card} ref={typesRefs[type]}>
+                {typeTitle}
+              </h2>
               <div className={style.container_card}>
                 {ingredients.map((ingredient) => (
                   <IngredientCard
@@ -133,11 +135,6 @@ export default function BurgerIngredients() {
           ))}
         </div>
       </div>
-      {modal && (
-        <Modal header="Детали ингредиента" onClose={() => onIngredientClick()}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </>
   );
 }
