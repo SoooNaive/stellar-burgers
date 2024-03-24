@@ -38,8 +38,8 @@ export default function IngredientCard({ ingredient, onIngredientClick }) {
   return (
     <>
       <div
-        ref={dragRef}
         className={style.card}
+        ref={dragRef}
         onClick={() => onIngredientClick(ingredient)}
       >
         {count !== 0 && (

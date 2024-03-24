@@ -4,47 +4,85 @@ import {
   ListIcon,
   ProfileIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import styleHeader from './app-header.module.css';
+
+import { NavLink } from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+
+import style from './app-header.module.css';
 
 export default function AppHeader() {
+  const userName = useSelector((store) => store.userState.userData.name);
+  const activeStyle = {
+    color: 'white',
+  };
+  const location = useLocation();
+
+  const path = location.pathname;
+
   return (
     <>
-      <header className={styleHeader.header}>
-        <div className={styleHeader.container_header}>
-          <nav className={styleHeader.nav}>
-            <div className={styleHeader.link}>
-              <a className={styleHeader.link_active}>
-                <span className={styleHeader.icon}>
-                  <BurgerIcon type="primary" />
+      <header className={style.header}>
+        <div className={style.container_header}>
+          <nav className={style.nav}>
+            <div className={style.link}>
+              <NavLink
+                className={style.link_text}
+                to="/"
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
+                <span className={style.icon}>
+                  <BurgerIcon type={path === '/' ? 'primary' : 'secondary'} />
                 </span>
                 Конструктор
-              </a>
+              </NavLink>
             </div>
-            <div className={styleHeader.link}>
-              <a
-                className={styleHeader.link_text}
+            <div className={style.link}>
+              <NavLink
+                className={style.link_text}
+                to="/feed"
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
               >
-                <span className={styleHeader.icon}>
-                  <ListIcon type="secondary" />
+                <span className={style.icon}>
+                  <ListIcon type={path === '/feed' ? 'primary' : 'secondary'} />
                 </span>
                 Лента заказов
-              </a>
+              </NavLink>
             </div>
           </nav>
 
-          <div className={styleHeader.logo}>
+          <NavLink to="/" className={style.logo}>
             <Logo />
-          </div>
+          </NavLink>
 
-          <div className={styleHeader.user_account}>
-            <a
-              className={styleHeader.link_text}
+          <div className={style.user_account}>
+            <NavLink
+              className={style.link_text}
+              to="/profile"
+              style={
+                path === '/login' ||
+                path === '/profile' ||
+                path === '/register' ||
+                path === '/forgot-password'
+                  ? activeStyle
+                  : undefined
+              }
             >
-              <span className={styleHeader.icon}>
-                <ProfileIcon type="secondary" />
+              <span className={style.icon}>
+                <ProfileIcon
+                  type={
+                    path === '/login' ||
+                    path === '/profile' ||
+                    path === '/register' ||
+                    path === '/forgot-password'
+                      ? 'primary'
+                      : 'secondary'
+                  }
+                />
               </span>
-              Личный кабинет
-            </a>
+              {userName ? userName : 'Личный кабинет'}
+            </NavLink>
           </div>
         </div>
       </header>

@@ -1,0 +1,19 @@
+.title {
+  composes: mt-6 text text_type_main-medium from global;
+  text-align: center;
+}
+.content_link {
+  composes: text text_type_main-small from global;
+  text-decoration: none;
+  color: #4c4cff;
+}
+.container_notfound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 90vh;
+  justify-content: center;
+}
+.title_notfound {
+  composes: mb-6 text text_type_main-medium from global;
+}

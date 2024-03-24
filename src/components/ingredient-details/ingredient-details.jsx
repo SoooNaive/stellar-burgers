@@ -1,20 +1,22 @@
-import { useSelector } from 'react-redux';
-
 import style from './ingredient-details.module.css';
 
-export default function IngredientDetails() {
-  const ingredient = useSelector((state) => state.ingredientDetails.details);
-  const details = [
-    ['Калории,ккал', ingredient.calories],
-    ['Белки, г', ingredient.proteins],
-    ['Жиры, г', ingredient.fat],
-    ['Углеводы, г', ingredient.carbohydrates],
-  ];
+import { DataType } from '../../utils/data-type';
 
+export default function IngredientDetails(ingredient) {
+  const details = [
+    ['Калории,ккал', ingredient.ingredient.calories],
+    ['Белки, г', ingredient.ingredient.proteins],
+    ['Жиры, г', ingredient.ingredient.fat],
+    ['Углеводы, г', ingredient.ingredient.carbohydrates],
+  ];
   return (
+    <>
       <div className={style.container_details}>
-        <img src={ingredient.image_large} alt={ingredient.name} />
-        <p className={style.details_name}>{ingredient.name}</p>
+        <img
+          src={ingredient.ingredient.image_large}
+          alt={ingredient.ingredient.name}
+        />
+        <p className={style.details_name}>{ingredient.ingredient.name}</p>
         <div className={style.details}>
           {details.map(([text, value]) => (
             <div key={text}>
@@ -24,6 +26,9 @@ export default function IngredientDetails() {
           ))}
         </div>
       </div>
+    </>
   );
 }
-
+IngredientDetails.propTypes = {
+  ingredient: DataType.isRequired,
+};
