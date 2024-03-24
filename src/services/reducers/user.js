@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getCookie } from '../../utils/cookie';
-import { userRequest } from '../../utils/utils';
+import { userRequest } from '../../utils/burger-api';
 
 const initialState = {
   userData: {

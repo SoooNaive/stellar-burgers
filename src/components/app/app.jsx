@@ -17,10 +17,9 @@ import NotFound404 from '../../pages/not-found-404/not-found-404.jsx';
 
 import AppHeader from '../app-header/app-header.jsx';
 
-import { ProtectedRoute } from '../protected-route/protected-route';
-
 import { checkAuth } from '../../services/reducers/user';
 import { getIngredients } from '../../services/reducers/ingredients';
+import { OnlyUnAuth, OnlyAuth } from '../protected-route/protected-route';
 
 function App() {
   const location = useLocation();
@@ -39,13 +38,25 @@ function App() {
       <AppHeader />
       <Routes location={location.state?.backgroundLocation || location}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route
+          path="/login"
+          element={<OnlyUnAuth component={<LoginPage />} />}
+        />
+        <Route
+          path="/register"
+          element={<OnlyUnAuth component={<RegisterPage />} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={<OnlyUnAuth component={<ForgotPasswordPage />} />}
+        />
+        <Route
+          path="/reset-password"
+          element={<OnlyUnAuth component={<ResetPasswordPage />} />}
+        />
         <Route
           path="/profile"
-          element={<ProtectedRoute element={<ProfilePage />} />}
+          element={<OnlyAuth component={<ProfilePage />} />}
         >
           <Route index element={<ProfileUser />} />
           <Route path="orders" element={<ProfileOrder />} />
@@ -54,6 +65,7 @@ function App() {
         <Route path="/ingredients/:id" element={<BurgerIngredientPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
+
       {location.state?.backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<BurgerIngredientModal />} />

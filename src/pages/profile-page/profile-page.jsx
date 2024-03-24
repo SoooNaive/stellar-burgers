@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { onLogout } from '../../utils/burger-api';
+import { onLogout } from '../../services/actions/user';
 import { useDispatch } from 'react-redux';
 
 import style from './profile-page.module.css';

@@ -6,7 +6,7 @@ import {
   onRegister,
   onForgotPassword,
   onResetPassword,
-} from '../utils/burger-api';
+} from '../services/actions/user';
 
 export function useForm(inputValues) {
   const userName = useSelector((store) => store.userState.userData.name);

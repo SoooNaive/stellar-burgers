@@ -28,10 +28,7 @@ function ProfileUser() {
     handleUpdateUser,
   } = useForm(userData);
 
-  const isActive =
-    isEdited &&
-    (formData.name.length ? true : false) &&
-    (formData.password.length > 5 ? true : false);
+  const isActive = isEdited && (formData.name.length ? true : false);
 
   useEffect(() => {
     handleResetForm();

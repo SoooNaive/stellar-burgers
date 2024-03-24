@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Button,
@@ -25,6 +26,7 @@ import style from './burger-constructor.module.css';
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const ondropHeandler = (ingredient) => {
     dispatch(addIngredient(ingredient));
@@ -52,6 +54,10 @@ export default function BurgerConstructor() {
   }, [ingredients, bun]);
 
   const onClickOrder = () => {
+    if (!userName) {
+      navigate('/login');
+      return null;
+    }
     let allIngredients = [];
     const idIngedients = ingredients?.map((ingredient) => {
       return ingredient._id;
@@ -99,11 +105,6 @@ export default function BurgerConstructor() {
           top={false}
         />
       </div>
-      {!userName && (
-        <div className={style.text_buttom}>
-          <p>Авторизуйтесь для оформления заказа</p>
-        </div>
-      )}
       <div className={style.finalSum}>
         {!isNaN(finalSum) && (
           <p>
@@ -120,7 +121,7 @@ export default function BurgerConstructor() {
           size="large"
           extraClass="ml-10"
           onClick={onClickOrder}
-          disabled={!ingredients.length || !bun || !userName}
+          disabled={!ingredients.length || !bun}
         >
           Оформить заказ
         </Button>

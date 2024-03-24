@@ -1,170 +1,125 @@
-import { setCookie, deleteCookie } from './cookie';
+import { getCookie } from './cookie';
 import { checkResponse } from './check-response';
-
-import {
-  loginRequest,
-  updateRequest,
-  logoutRequest,
-  registerRequest,
-  forgotPasswordRequest,
-  resetPasswordRequest,
-  refreshTokenRequest,
-} from './utils';
-
-import {
-  setUser,
-  setUserRequest,
-  setUserError,
-  setUpdateUserRequest,
-  setUpdateUser,
-  setUpdateUserError,
-  setLogoutRequest,
-  setLogoutError,
-  setLogoutUser,
-  setForgotPasswordError,
-  setForgotPasswordRequest,
-  setForgotPasswordConfirmed,
-  setChangePasswordError,
-  setChangePasswordConfirmed,
-  setChangePasswordRequest,
-} from '../services/reducers/user';
+import { onRefreshToken } from '../services/actions/user';
 
 export const BURGER_API_URL = 'https://norma.nomoreparties.space/api';
 
-export const onLogin = (body) => {
-  return async function (dispatch) {
-    dispatch(setUserRequest(true));
-    loginRequest(body)
-      .then(checkResponse)
-      .then((res) => {
-        const accessToken = res.accessToken.split('Bearer ')[1];
-        const refreshToken = res.refreshToken;
-        setCookie('accessToken', accessToken);
-        setCookie('refreshToken', refreshToken);
-        dispatch(setUser(res));
-      })
-      .catch((err) => {
-        dispatch(setUserError(err));
-        console.warn(err);
-      });
-  };
+export const loginRequest = async ({ email, password }) => {
+  return fetch(`${BURGER_API_URL}/auth/login`, {
+    method: 'POST',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      email: email,
+      password: password,
+    }),
+  });
+};
+export const updateRequest = async ({ email, name, password }) => {
+  return fetch(`${BURGER_API_URL}/auth/user`, {
+    method: 'PATCH',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: 'Bearer ' + getCookie('accessToken'),
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      email: email,
+      name: name,
+      password: password,
+    }),
+  });
 };
 
-export const onUpdateUser = (user) => {
-  return async function (dispatch) {
-    dispatch(setUpdateUserRequest(true));
-    updateRequest(user)
-      .then(checkResponse)
-      .then((res) => {
-        dispatch(setUpdateUser(res));
-      })
-      .then(() => {
-        dispatch(setUpdateUserRequest(false));
-      })
-      .catch((err) => {
-        dispatch(setUpdateUserError(err));
-        console.warn(err);
-      });
-  };
+export const logoutRequest = async () => {
+  return fetch(`${BURGER_API_URL}/auth/logout`, {
+    method: 'POST',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      token: getCookie('refreshToken'),
+    }),
+  });
+};
+export const registerRequest = ({ email, password, name }) => {
+  return fetch(`${BURGER_API_URL}/auth/register`, {
+    method: 'POST',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      email: email,
+      password: password,
+      name: name,
+    }),
+  });
+};
+export const forgotPasswordRequest = async ({ email }) => {
+  return fetch(`${BURGER_API_URL}/password-reset`, {
+    method: 'POST',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      email: email,
+    }),
+  });
 };
 
-export const onLogout = () => {
-  return async function (dispatch) {
-    dispatch(setLogoutRequest(true));
-    logoutRequest()
-      .then(checkResponse)
-      .then((res) => {
-        dispatch(setLogoutUser());
-        deleteCookie('refreshToken');
-        deleteCookie('accessToken');
-      })
-      .then(() => {
-        dispatch(setLogoutRequest(false));
-      })
-      .catch((err) => {
-        dispatch(setLogoutError(err));
-        console.warn(err);
-      });
-  };
+export const resetPasswordRequest = async ({ password, token }) => {
+  return fetch(`${BURGER_API_URL}/password-reset/reset`, {
+    method: 'POST',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify({
+      password: password,
+      token: token,
+    }),
+  });
 };
 
-export const onRegister = (body) => {
-  return async function (dispatch) {
-    dispatch(setUserRequest(true));
-    return registerRequest(body)
-      .then(checkResponse)
-      .then((res) => {
-        const accessToken = res.accessToken.split('Bearer ')[1];
-        const refreshToken = res.refreshToken;
-        setCookie('accessToken', accessToken);
-        setCookie('refreshToken', refreshToken);
-        dispatch(setUser(res));
-      })
-      .then(() => {
-        dispatch(setUserRequest(false));
-      })
-      .catch((err) => {
-        dispatch(setUserError(err));
-        console.warn(err);
-      });
-  };
-};
-export const onForgotPassword = (body) => {
-  return async function (dispatch) {
-    dispatch(setForgotPasswordRequest(true));
-    forgotPasswordRequest(body)
-      .then(checkResponse)
-      .then((res) => {
-        if (res.success) {
-          dispatch(setForgotPasswordConfirmed(res.success));
-        }
-      })
-      .then(() => {
-        dispatch(setForgotPasswordRequest(false));
-      })
-      .catch((err) => {
-        dispatch(setForgotPasswordError(err));
-        console.warn(err);
-      });
-  };
+export const userRequest = () => {
+  return onRefreshToken(`${BURGER_API_URL}/auth/user`, {
+    headers: {
+      Authorization: 'Bearer ' + getCookie('accessToken'),
+    },
+  });
 };
 
-export const onResetPassword = (body) => {
-  return async function (dispatch) {
-    dispatch(setChangePasswordRequest(true));
-    resetPasswordRequest(body)
-      .then(checkResponse)
-      .then((res) => {
-        if (res.success) {
-          dispatch(setChangePasswordConfirmed(res.success));
-        }
-      })
-      .then(() => {
-        dispatch(setChangePasswordRequest(false));
-      })
-      .catch((err) => {
-        dispatch(setChangePasswordError(err));
-        console.warn(err);
-      });
-  };
-};
-
-export const onRefreshToken = async (url, options) => {
-  try {
-    const res = await fetch(url, options);
-    return await checkResponse(res);
-  } catch (error) {
-    if (error.message === 'jwt expired') {
-      const refreshData = await refreshTokenRequest();
-      if (!refreshData.success) {
-        Promise.reject(refreshData);
-      }
-      setCookie('accessToken', refreshData.accessToken);
-      options.headers.authorization = refreshData.accessToken;
-      const res = await fetch(url, options);
-      return await checkResponse(res);
-    } else {
-      return Promise.reject(error);
-    }
-  }
+export const refreshTokenRequest = async () => {
+  return fetch(`${BURGER_API_URL}/auth/token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify({
+      token: getCookie('refreshToken'),
+    }),
+  }).then(checkResponse);
 };

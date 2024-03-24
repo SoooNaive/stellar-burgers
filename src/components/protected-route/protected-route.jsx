@@ -1,18 +1,25 @@
-import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import { Navigate, useLocation } from 'react-router-dom';
 
-export const ProtectedRoute = ({ element }) => {
-  const isAuth = useSelector((state) => state.userState.user.userRequest);
+function ProtectedRoute({ onlyUnAuth = false, component }) {
   const userName = useSelector((state) => state.userState.userData.name);
 
-  if (!isAuth && userName) {
-    return null;
+  const location = useLocation();
+
+  if (onlyUnAuth && userName) {
+    const { from } = location.state || { from: { pathname: '/' } };
+
+    return <Navigate to={from} />;
   }
 
-  return userName ? element : <Navigate to="/login" replace />;
-};
+  if (!onlyUnAuth && !userName) {
+    return <Navigate to="/login" state={{ from: location }} />;
+  }
 
-ProtectedRoute.propTypes = {
-  element: PropTypes.object,
-};
+  return component;
+}
+
+export const OnlyAuth = ProtectedRoute;
+export const OnlyUnAuth = ({ component }) => (
+  <ProtectedRoute onlyUnAuth={true} component={component} />
+);

@@ -52,9 +52,9 @@ export default function AppHeader() {
             </div>
           </nav>
 
-          <div className={style.logo}>
+          <NavLink to="/" className={style.logo}>
             <Logo />
-          </div>
+          </NavLink>
 
           <div className={style.user_account}>
             <NavLink
