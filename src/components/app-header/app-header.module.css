@@ -10,28 +10,29 @@
   align-items: center;
   width: 100%;
   background-color: #1c1c21;
-  margin-left: -20px;
   margin-right: -20px;
 }
 .link {
   composes: pl-5 pr-5 pb-4 pt-4 from global;
 }
-.test {
+.center {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
 }
 .container_header,
 .nav {
-  composes: test;
+  composes: center;
 }
 .link_text {
   composes: text text_type_main-default text_color_inactive from global;
-  composes: test;
+  composes: center;
+  text-decoration: none;
 }
 .link_active {
   composes: text text_type_main-small from global;
-  composes: test;
+  composes: center;
+  text-decoration: none;
 }
 .container_header {
   max-width: 100vw;
