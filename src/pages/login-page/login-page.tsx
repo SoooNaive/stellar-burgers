@@ -48,11 +48,13 @@ export const LoginPage: FC = () => {
             name={'email'}
             value={formData.email}
             onChange={handleChange}
+            autoComplete="email"
           />
           <PasswordInput
             name={'password'}
             value={formData.password}
             onChange={handleChange}
+            autoComplete="current-password"
           />
           <Button htmlType="submit">Войти</Button>
         </form>

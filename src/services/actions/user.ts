@@ -53,7 +53,6 @@ export const onUpdateUser = (user: TUser) => {
   return async function (dispatch: AppDispatch) {
     dispatch(setUpdateUserRequest(true));
     updateRequest(user)
-      .then(checkResponse)
       .then((res) => {
         dispatch(setUpdateUser(res));
       })
@@ -148,7 +147,7 @@ export const onResetPassword = (body: TUser) => {
   };
 };
 
-export const onRefreshToken = async (url: string, options: RequestInit) => {
+export const fetchWithRefresh = async (url: string, options: RequestInit) => {
   return fetch(url, options)
     .then(checkResponse)
     .catch(async (error: TError) => {

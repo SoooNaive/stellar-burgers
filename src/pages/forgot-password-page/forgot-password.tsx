@@ -49,6 +49,7 @@ export const ForgotPasswordPage: FC = () => {
             onChange={handleChange}
             value={formData.email}
             name={'email'}
+            autoComplete="email"
           />
           <Button htmlType="submit">Восстановить</Button>
         </form>

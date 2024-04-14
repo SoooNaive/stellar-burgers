@@ -57,6 +57,7 @@ export const ResetPasswordPage: FC = () => {
             value={formData.password}
             name={'password'}
             placeholder={'Введите новый пароль'}
+            autoComplete="new-password"
           />
           <Input
             type={'text'}
@@ -68,6 +69,7 @@ export const ResetPasswordPage: FC = () => {
             errorText={'Ошибка'}
             size={'default'}
             extraClass={`mb-6`}
+            autoComplete="webauthn"
           />
           <Button htmlType="submit">Сохранить</Button>
         </form>

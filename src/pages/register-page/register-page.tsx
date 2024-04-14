@@ -53,16 +53,19 @@ export const RegisterPage: FC = () => {
             onChange={handleChange}
             value={formData.name}
             error={false}
+            autoComplete="name"
           />
           <EmailInput
             name={'email'}
             onChange={handleChange}
             value={formData.email}
+            autoComplete="email"
           />
           <PasswordInput
             name={'password'}
             onChange={handleChange}
             value={formData.password}
+            autoComplete="new-password"
           />
           <Button htmlType="submit">Регистрация</Button>
         </form>

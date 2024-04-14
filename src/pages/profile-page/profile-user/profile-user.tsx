@@ -55,18 +55,21 @@ export const ProfileUser: FC = () => {
           error={false}
           errorText={'Ошибка'}
           size={'default'}
+          autoComplete="name"
         />
         <EmailInput
           onChange={handleChange}
           value={formData.email}
           name={'email'}
           isIcon={true}
+          autoComplete="email"
         />
         <PasswordInput
           onChange={handleChange}
           value={formData.password}
           name={'password'}
           icon="EditIcon"
+          autoComplete="current-password"
         />
         <div className={style.profileButtons}>
           <Button

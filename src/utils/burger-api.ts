@@ -1,6 +1,6 @@
 import { getCookie } from './cookie';
 import { checkResponse } from './check-response';
-import { onRefreshToken } from '../services/actions/user';
+import { fetchWithRefresh } from '../services/actions/user';
 
 import { TUser } from '../types/types';
 
@@ -23,7 +23,7 @@ export const loginRequest = async ({ email, password }: TUser) => {
   });
 };
 export const updateRequest = async ({ email, name, password }: TUser) => {
-  return fetch(`${BURGER_API_URL}/auth/user`, {
+  return fetchWithRefresh(`${BURGER_API_URL}/auth/user`, {
     method: 'PATCH',
     cache: 'no-cache',
     credentials: 'same-origin',
@@ -107,7 +107,7 @@ export const resetPasswordRequest = async ({ password, token }: TUser) => {
 };
 
 export const userRequest = () => {
-  return onRefreshToken(`${BURGER_API_URL}/auth/user`, {
+  return fetchWithRefresh(`${BURGER_API_URL}/auth/user`, {
     headers: {
       Authorization: 'Bearer ' + getCookie('accessToken'),
     },
