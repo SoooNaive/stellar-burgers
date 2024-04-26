@@ -31,3 +31,10 @@
   display: flex;
   flex-direction: column;
 }
+.logout {
+  composes: link;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
