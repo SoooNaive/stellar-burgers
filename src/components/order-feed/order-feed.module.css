@@ -1,0 +1,6 @@
+.container {
+  max-height: 800px;
+  overflow-y: overlay;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}

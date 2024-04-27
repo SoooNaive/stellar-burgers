@@ -5,6 +5,7 @@ import { fetchWithRefresh } from '../services/actions/user';
 import { TUser } from '../types/types';
 
 export const BURGER_API_URL = 'https://norma.nomoreparties.space/api';
+export const BASE_WSS = `wss://norma.nomoreparties.space`;
 
 export const loginRequest = async ({ email, password }: TUser) => {
   return fetch(`${BURGER_API_URL}/auth/login`, {

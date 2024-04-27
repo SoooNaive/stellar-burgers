@@ -1,15 +1,35 @@
-import { store } from '../services/store';
+import store  from '../services/store';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { rootReducer } from '../services/reducers/root-reducer';
-import { ThunkDispatch } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { Action } from 'redux';
+import { Dispatch } from 'redux';
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-export type AppDispatch = typeof store.dispatch;
+// export type AppDispatch = typeof store.dispatch;
+
+export type AppDispatch = ReturnType<typeof store>['dispatch'];
+
+
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useTypedDispatch = () => useDispatch<AppThunkDispatch>();
 export type AppThunkDispatch = ThunkDispatch<RootState, never, Action<string>>;
+
+export type TPlaceOrder = {
+  order: TOrder,
+  name: string,
+  success: boolean
+}
+
+export type TwsActions = {
+  wsConnection: string,
+  wsOffline: string,
+  wsOpen: string,
+  wsError: string,
+  wsMessage: string,
+  wsClose: string
+}
 
 export type TEventTarget = {
   target: {
@@ -108,11 +128,35 @@ export type TDrag = {
   hoverIndex: number;
 };
 
-export type TOrderState = {
+export type TCreateOrderState = {
   number: null | number;
   isOpened: boolean;
   error: boolean;
   isLoading: boolean;
+};
+
+export type TOrders = {
+  success: boolean,
+  orders: Array<TOrder>,
+  total: number,
+  totalToday: number
+}
+export type TOrder = {
+  _id: string,
+  ingredients: Array<string>,
+  status: string,
+  name: string,
+  createdAt: string,
+  updatedAt: string,
+  number: number
+}
+
+export type TOrderState = {
+  wsOpen: boolean,
+  wsUrl: string,
+  wsConnectionStatus: boolean,
+  wsError: null | string,
+  orders: null | TOrders
 };
 
 export type TIngredientType = 'bun' | 'sauce' | 'main';

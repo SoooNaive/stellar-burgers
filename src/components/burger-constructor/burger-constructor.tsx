@@ -11,7 +11,7 @@ import {
   sendOrder,
   closeModalOrder,
   openModalOrder,
-} from '../../services/reducers/order';
+} from '../../services/reducers/create-order';
 
 import { openOrderModal } from '../../services/reducers/burger-constructor';
 import { addIngredient } from '../../services/reducers/burger-constructor';

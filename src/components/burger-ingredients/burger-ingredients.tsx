@@ -124,44 +124,42 @@ export const BurgerIngredients: FC = () => {
   }
 
   return (
-    <>
-      <div className={style.container_burgerIngredients}>
-        <p className={style.title_cards}>Соберите бургер</p>
-        <div className={style.burger_tabs}>
-          {tabs.map(({ type, title }) => (
-            <Tab
-              key={type}
-              value={type}
-              active={current === type}
-              onClick={(item: string) => onTabClick(item as TIngredientType)}
-            >
-              {title}
-            </Tab>
-          ))}
-        </div>
-        <div className={`scroll ${style.container_cards}`}>
-          {listIngredients.map(({ typeTitle, ingredients, type }) => (
-            <div key={typeTitle}>
-              <h2
-                className={style.title_card}
-                ref={typesRefs[type!]}
-                data-type={type}
-              >
-                {typeTitle}
-              </h2>
-              <div className={style.container_card}>
-                {ingredients.map((ingredient) => (
-                  <IngredientCard
-                    key={ingredient._id}
-                    ingredient={ingredient}
-                    onIngredientClick={onIngredientClick}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+    <div className={style.container_burgerIngredients}>
+      <p className={style.title_cards}>Соберите бургер</p>
+      <div className={style.burger_tabs}>
+        {tabs.map(({ type, title }) => (
+          <Tab
+            key={type}
+            value={type}
+            active={current === type}
+            onClick={(item: string) => onTabClick(item as TIngredientType)}
+          >
+            {title}
+          </Tab>
+        ))}
       </div>
-    </>
+      <div className={`scroll ${style.container_cards}`}>
+        {listIngredients.map(({ typeTitle, ingredients, type }) => (
+          <div key={typeTitle}>
+            <h2
+              className={style.title_card}
+              ref={typesRefs[type!]}
+              data-type={type}
+            >
+              {typeTitle}
+            </h2>
+            <div className={style.container_card}>
+              {ingredients.map((ingredient) => (
+                <IngredientCard
+                  key={ingredient._id}
+                  ingredient={ingredient}
+                  onIngredientClick={onIngredientClick}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };

@@ -2,8 +2,9 @@ import { combineReducers } from 'redux';
 import { ingredientsReducer } from './ingredients';
 import { modalIngredientsReducer } from './ingredient-details';
 import { burgerConstructorReducer } from './burger-constructor';
-import { modalOrderReduser } from './order';
+import { modalOrderReduser } from './create-order';
 import { userReducer } from './user';
+import {orderSReducer} from './orders'
 
 export const rootReducer = combineReducers({
   ingredientsState: ingredientsReducer,
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
   burgerConstructorState: burgerConstructorReducer,
   modalOrderState: modalOrderReduser,
   userState: userReducer,
+  orderState: orderSReducer,
 });
 
 export default rootReducer;

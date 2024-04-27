@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BURGER_API_URL } from '../../utils/burger-api';
 import { checkResponse } from '../../utils/check-response';
 
-import { TOrderState, AppDispatch } from '../../types/types';
+import { TCreateOrderState, AppDispatch } from '../../types/types';
 
-const initialState: TOrderState = {
+const initialState: TCreateOrderState = {
   number: null,
   isOpened: false,
   error: false,

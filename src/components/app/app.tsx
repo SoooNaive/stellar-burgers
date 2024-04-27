@@ -13,6 +13,7 @@ import { ForgotPasswordPage } from '../../pages/forgot-password-page/forgot-pass
 import { ResetPasswordPage } from '../../pages/reset-password-page/reset-password';
 import { FeedPage } from '../../pages/feed-page/feed';
 import { NotFound404 } from '../../pages/not-found-404/not-found-404';
+import { OrderDetails } from '../order-details/order-details'
 
 import { AppHeader } from '../app-header/app-header';
 
@@ -62,7 +63,9 @@ export const App: FC = () => {
           <Route index element={<ProfileUser />} />
           <Route path="orders" element={<ProfileOrder />} />
         </Route>
+        <Route path="/profile/orders/:id" element={ <OnlyAuth component={ <OrderDetails /> } /> }/>
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/:id" element={ <OrderDetails /> }/>
         <Route path="/ingredients/:id" element={<BurgerIngredientPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
@@ -70,6 +73,11 @@ export const App: FC = () => {
       {location.state?.backgroundLocation && (
         <Routes>
           <Route path="/ingredients/:id" element={<BurgerIngredientModal />} />
+
+          <Route path="/feed/:id" element={<OrderDetails />} />
+
+          <Route path="/profile/orders/:id" element={<OrderDetails />} />
+          
         </Routes>
       )}
     </>
