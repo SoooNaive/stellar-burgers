@@ -29,6 +29,9 @@
   flex-direction: row;
   padding: 0;
   position: relative;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .imgContainer {
@@ -57,4 +60,12 @@
   line-height: 24px;
   left: 19px;
   z-index: 7;
+}
+.price {
+  composes: text text_type_digits-default from global;
+  display: inline-flex;
+}
+.iconPrice {
+  display: flex;
+  padding-left: 10px;
 }

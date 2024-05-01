@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 import { HomePage } from '../../pages/home-page/home-page';
@@ -13,7 +13,6 @@ import { ForgotPasswordPage } from '../../pages/forgot-password-page/forgot-pass
 import { ResetPasswordPage } from '../../pages/reset-password-page/reset-password';
 import { FeedPage } from '../../pages/feed-page/feed';
 import { NotFound404 } from '../../pages/not-found-404/not-found-404';
-import { OrderDetails } from '../order-details/order-details'
 
 import { AppHeader } from '../app-header/app-header';
 
@@ -23,7 +22,13 @@ import { OnlyUnAuth, OnlyAuth } from '../protected-route/protected-route';
 import { FC } from 'react';
 import { useTypedDispatch } from '../../types/types';
 
+import { useCallback } from 'react';
+import { Modal } from '../../components/modal/modal';
+
+import { OrderFeedDetails } from '../../components/order-feed-details/order-feed-details';
+
 export const App: FC = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useTypedDispatch();
 
@@ -34,6 +39,10 @@ export const App: FC = () => {
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
+
+  const onCloseModal = useCallback(() => {
+    navigate(location.state?.backgroundLocation);
+  }, [location.state?.backgroundLocation, navigate]);
 
   return (
     <>
@@ -63,9 +72,12 @@ export const App: FC = () => {
           <Route index element={<ProfileUser />} />
           <Route path="orders" element={<ProfileOrder />} />
         </Route>
-        <Route path="/profile/orders/:id" element={ <OnlyAuth component={ <OrderDetails /> } /> }/>
+        <Route
+          path="/profile/orders/:id"
+          element={<OnlyAuth component={<OrderFeedDetails />} />}
+        />
         <Route path="/feed" element={<FeedPage />} />
-        <Route path="/feed/:id" element={ <OrderDetails /> }/>
+        <Route path="/feed/:id" element={<OrderFeedDetails />} />
         <Route path="/ingredients/:id" element={<BurgerIngredientPage />} />
         <Route path="*" element={<NotFound404 />} />
       </Routes>
@@ -74,10 +86,27 @@ export const App: FC = () => {
         <Routes>
           <Route path="/ingredients/:id" element={<BurgerIngredientModal />} />
 
-          <Route path="/feed/:id" element={<OrderDetails />} />
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal onClose={onCloseModal}>
+                <OrderFeedDetails />
+              </Modal>
+            }
+          />
 
-          <Route path="/profile/orders/:id" element={<OrderDetails />} />
-          
+          <Route
+            path="/profile/orders/:id"
+            element={
+              <OnlyAuth
+                component={
+                  <Modal onClose={onCloseModal}>
+                    <OrderFeedDetails />
+                  </Modal>
+                }
+              />
+            }
+          />
         </Routes>
       )}
     </>

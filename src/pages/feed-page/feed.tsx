@@ -1,30 +1,28 @@
 import { useEffect, FC } from 'react';
-import { setWebsocketConnection, setWebsocketOffline } from '../../services/reducers/orders';
-import { BASE_WSS } from '../../utils/burger-api';
+import {
+  setWebsocketConnection,
+  setWebsocketOffline,
+} from '../../services/reducers/orders';
+import { BURGER_API_WSS } from '../../utils/burger-api';
 
 import { useLocation } from 'react-router-dom';
-import { useTypedSelector } from '../../types/types';
 import { useTypedDispatch } from '../../types/types';
 
 import { OrderFeed } from '../../components/order-feed/order-feed';
+import { OrderFeedTotal } from '../../components/order-feed-total/order-feed-total';
 
-import style from './feed-page.module.css'
+import style from './feed-page.module.css';
 
 export const FeedPage: FC = () => {
-
   const dispatch = useTypedDispatch();
-  const orders = useTypedSelector(store => store.orderState?.orders);
   const location = useLocation();
 
   useEffect(() => {
-    dispatch(setWebsocketConnection(`${BASE_WSS}/orders/all`))
+    dispatch(setWebsocketConnection(`${BURGER_API_WSS}/orders/all`));
     return () => {
-      dispatch(setWebsocketOffline())
-    }
-  }, [location.pathname])
-
-  console.log(orders);
-
+      dispatch(setWebsocketOffline());
+    };
+  }, [location.pathname, dispatch]);
 
   return (
     <div className={style.container}>
@@ -33,7 +31,8 @@ export const FeedPage: FC = () => {
         <OrderFeed />
       </div>
       <div className={style.containerInfo}>
+        <OrderFeedTotal />
       </div>
     </div>
-  )
-}
+  );
+};

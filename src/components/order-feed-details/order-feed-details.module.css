@@ -1,0 +1,89 @@
+.orderContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 640px;
+  justify-content: center;
+  margin: 0 auto;
+}
+.number {
+  composes: text text_type_digits-default from global;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nameTitle {
+  composes: text text_type_main-medium from global;
+}
+.ingredientInfo {
+  margin-top: 10px;
+  max-height: 250px;
+  overflow-y: overlay;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+.title {
+  composes: text text_type_main-medium from global;
+}
+.ingredient {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30px;
+  margin-top: 10px;
+}
+.imageContainer {
+  width: 54px;
+  height: 54px;
+  flex-direction: column;
+  border: double 2px transparent;
+  background-image: linear-gradient(rgb(19, 19, 22), rgb(19, 19, 22)),
+    linear-gradient(63.18deg, #801ab3, #4c4cff);
+  border-radius: 50%;
+  background-clip: content-box, border-box;
+}
+
+.image {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+}
+.ingredientName {
+  composes: text text_type_main-small from global;
+  margin-left: 20px;
+}
+
+.ingredientPrice {
+  composes: text text_type_digits-default from global;
+}
+.ingredientPriceIcon {
+  padding-left: 10px;
+}
+
+.ingredientLeft {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.orderFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+.orderPrice {
+  composes: ingredientPrice;
+  display: flex;
+}
+.orderDate {
+  composes: text text_type_main-default text_color_inactive from global;
+}
+
+.spinner {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}

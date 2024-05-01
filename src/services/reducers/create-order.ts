@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BURGER_API_URL } from '../../utils/burger-api';
 import { checkResponse } from '../../utils/check-response';
+import { getCookie } from '../../utils/cookie';
 
 import { TCreateOrderState, AppDispatch } from '../../types/types';
 
@@ -18,6 +19,7 @@ export const sendOrder = (allIngredients: Array<string>) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
+        Authorization: 'Bearer ' + getCookie('accessToken'),
       },
       body: JSON.stringify({
         ingredients: allIngredients,
