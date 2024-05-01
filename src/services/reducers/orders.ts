@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TOrderState, TOrders } from '../../types/types';
-import { onFetchOrder } from '../actions/order';
 
 const orderState: TOrderState = {
   wsOpen: false,
@@ -43,23 +42,21 @@ export const orderSlice = createSlice({
     setWebsocketGetOrders: (state, action: PayloadAction<TOrders>) => {
       state.orders = action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(onFetchOrder.pending, (state) => {
+    onFetchOrderPending(state) {
       state.order = null;
       state.fetchRequest = true;
-    });
-    builder.addCase(onFetchOrder.fulfilled, (state, action) => {
+    },
+    onFetchOrderFulfilled(state, action) {
       state.order = null;
       state.order = action.payload;
       state.fetchRequest = false;
       state.fetchError = null;
-    });
-    builder.addCase(onFetchOrder.rejected, (state, action) => {
+    },
+    onFetchOrderRejected(state, action) {
       state.order = null;
       state.fetchError = action.payload;
       state.fetchRequest = false;
-    });
+    },
   },
 });
 
@@ -70,5 +67,8 @@ export const {
   setWebsocketOffline,
   setWebsocketConnectionError,
   setWebsocketGetOrders,
+  onFetchOrderPending,
+  onFetchOrderFulfilled,
+  onFetchOrderRejected,
 } = orderSlice.actions;
 export const orderSReducer = orderSlice.reducer;

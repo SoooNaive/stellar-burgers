@@ -1,6 +1,3 @@
-import { useSelector } from 'react-redux';
-
-import { TOrder, TIngredient } from '../../types/types';
 import {
   CurrencyIcon,
   FormattedDate,
@@ -8,7 +5,7 @@ import {
 import { useCallback, FC, useEffect } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { useTypedDispatch } from '../../types/types';
+import { useTypedDispatch, useTypedSelector } from '../../types/types';
 import { onFetchOrder } from '../../services/actions/order';
 
 import style from './order-feed-details.module.css';
@@ -19,9 +16,9 @@ export const OrderFeedDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const dispatch = useTypedDispatch();
-  const ingredients = useSelector(
-    (store: { ingredientsState: { ingredients: { data: TIngredient[] } } }) =>
-      store.ingredientsState.ingredients.data
+
+  const ingredients = useTypedSelector(
+    (store) => store.ingredientsState.ingredients
   );
 
   useEffect(() => {
@@ -30,10 +27,7 @@ export const OrderFeedDetails: FC = () => {
     }
   }, [dispatch, id]);
 
-  const order = useSelector(
-    (store: { orderState: { order: { orders: TOrder[] } } }) =>
-      store.orderState.order?.orders[0]
-  );
+  const order = useTypedSelector((store) => store.orderState.order?.orders[0]);
 
   const returnIngredientsQuantity = useCallback(
     (id: string | undefined) => {
@@ -45,7 +39,6 @@ export const OrderFeedDetails: FC = () => {
     },
     [order?.ingredients]
   );
-
   const returnIngredients = useCallback(() => {
     const mutatedIngredients = Array.from(new Set(order?.ingredients));
     return mutatedIngredients.map((ingredient, index) => {

@@ -4,12 +4,9 @@ import {
   CurrencyIcon,
   FormattedDate,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TIngredient } from '../../types/types';
+import { TIngredient, useTypedSelector } from '../../types/types';
 import style from './order.module.css';
-
-import { nanoid } from 'nanoid';
 
 interface IOrderProps {
   orderInfo: TOrder;
@@ -18,9 +15,9 @@ interface IOrderProps {
 export const Order: FC<IOrderProps> = ({ orderInfo }) => {
   const navigate = useNavigate();
   let location = useLocation();
-  const ingredients = useSelector(
-    (store: { ingredientsState: { ingredients: { data: TIngredient[] } } }) =>
-      store.ingredientsState.ingredients.data
+
+  const ingredients = useTypedSelector(
+    (store) => store.ingredientsState.ingredients
   );
 
   function onOrderClick(orderInfo: TOrder) {
@@ -91,7 +88,7 @@ export const Order: FC<IOrderProps> = ({ orderInfo }) => {
             } else if (index < 5) {
               return (
                 <div
-                  key={nanoid()}
+                  key={item._id}
                   className={style.imgContainer}
                   style={{ zIndex: 6 - index, left: offset + 'px' }}
                 >
@@ -106,7 +103,7 @@ export const Order: FC<IOrderProps> = ({ orderInfo }) => {
             } else if (index === 5) {
               return (
                 <div
-                  key={nanoid()}
+                  key={item._id}
                   className={style.imgContainer}
                   style={{
                     zIndex: 6 - index,

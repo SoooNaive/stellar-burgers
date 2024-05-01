@@ -1,16 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { IngredientDetails } from '../../components/ingredient-details/ingredient-details';
 import { Modal } from '../../components/modal/modal';
 import { FC } from 'react';
-import { TIngredient } from '../../types/types';
+import { TIngredient, useTypedSelector } from '../../types/types';
 
 export const BurgerIngredientModal: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const ingredients = useSelector(
-    (store: { ingredientsState: { ingredients: { data: TIngredient[] } } }) =>
-      store.ingredientsState.ingredients.data
+  const ingredients = useTypedSelector(
+    (store) => store.ingredientsState.ingredients
   );
   const navigate = useNavigate();
   const location = useLocation();

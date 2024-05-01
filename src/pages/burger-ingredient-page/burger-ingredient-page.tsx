@@ -4,14 +4,12 @@ import { IngredientDetails } from '../../components/ingredient-details/ingredien
 import { Link } from 'react-router-dom';
 import { FC } from 'react';
 import style from './burger-ingredient-page.module.css';
-import { TIngredient } from '../../types/types';
-import { useSelector } from 'react-redux';
+import { TIngredient, useTypedSelector } from '../../types/types';
 
 export const BurgerIngredientPage: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const ingredients = useSelector(
-    (store: { ingredientsState: { ingredients: { data: TIngredient[] } } }) =>
-      store.ingredientsState.ingredients.data
+  const ingredients = useTypedSelector(
+    (store) => store.ingredientsState.ingredients
   );
 
   const [product, setProduct] = useState<TIngredient>();

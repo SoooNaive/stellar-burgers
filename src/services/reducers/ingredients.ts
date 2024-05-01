@@ -30,9 +30,12 @@ export const ingredientsData = createSlice({
     fetchUsersRequest: (state) => {
       state.isLoading = true;
     },
-    fetchUsersSuccess: (state, action: PayloadAction<TIngredient[]>) => {
+    fetchUsersSuccess: (
+      state,
+      action: PayloadAction<{ data: TIngredient[] }>
+    ) => {
       state.isLoading = false;
-      state.ingredients = action.payload;
+      state.ingredients = action.payload.data;
     },
     fetchUsersFailure: (state) => {
       state.isLoading = false;

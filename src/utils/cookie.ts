@@ -1,5 +1,3 @@
-import { TSetCookieProps } from '../types/types';
-
 export const getCookie: (name: string) => string | undefined = (name) => {
   const matches = document.cookie.match(
     new RegExp(
@@ -14,7 +12,7 @@ export const getCookie: (name: string) => string | undefined = (name) => {
 export const setCookie: (
   name: string,
   value: string | number | boolean,
-  props: TSetCookieProps
+  props: { [key: string]: string | number | Date | boolean }
 ) => void = (name, value, props) => {
   props =
     {
@@ -28,7 +26,7 @@ export const setCookie: (
     d.setTime(d.getTime() + exp * 1000);
     exp = props.expires = d;
   }
-  if (exp && exp.toUTCString) {
+  if (exp && exp instanceof Date) {
     props.expires = exp.toUTCString();
   }
   value = encodeURIComponent(value);

@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, FC, MutableRefObject } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -9,7 +8,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import style from './burger-ingredients.module.css';
 
-import { TIngredientType, TIngredient } from '../../types/types';
+import {
+  TIngredientType,
+  TIngredient,
+  useTypedSelector,
+} from '../../types/types';
 
 interface IIngredientGroup {
   type?: TIngredientType;
@@ -36,10 +39,8 @@ const tabs: { type: TIngredientType; title: string }[] = (
 export const BurgerIngredients: FC = () => {
   const navigate = useNavigate();
   let location = useLocation();
-
-  const ingredients = useSelector(
-    (store: { ingredientsState: { ingredients: { data: TIngredient[] } } }) =>
-      store.ingredientsState.ingredients.data
+  const ingredients = useTypedSelector(
+    (store) => store.ingredientsState.ingredients
   );
 
   const [current, setCurrent] = useState<TIngredientType | undefined | string>(

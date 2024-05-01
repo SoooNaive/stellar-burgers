@@ -11,6 +11,7 @@ export type AppDispatch = ReturnType<typeof store>['dispatch'];
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useTypedDispatch = () => useDispatch<AppThunkDispatch>();
 export type AppThunkDispatch = ThunkDispatch<RootState, never, Action<string>>;
+
 export type TPlaceOrder = {
   order: TOrder;
   name: string;
@@ -31,10 +32,6 @@ export type TEventTarget = {
     value: string;
     name: string;
   };
-};
-
-export type TSetCookieProps = {
-  [key: string]: any | {};
 };
 
 export type TUser = {
@@ -148,7 +145,7 @@ export type TOrder = {
 
 export type TOneOrder = {
   success: boolean;
-  orders: Array<TOrder>;
+  orders: TOrder[];
 };
 
 export type TOrderState = {
