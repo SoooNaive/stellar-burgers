@@ -5,6 +5,20 @@ import { fetchWithRefresh } from '../services/actions/user';
 import { TUser } from '../types/types';
 
 export const BURGER_API_URL = 'https://norma.nomoreparties.space/api';
+export const BURGER_API_WSS = `wss://norma.nomoreparties.space`;
+
+export const getOrderRequest = async (number: string) => {
+  return fetch(`${BURGER_API_URL}/orders/${number}`, {
+    method: 'GET',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  });
+};
 
 export const loginRequest = async ({ email, password }: TUser) => {
   return fetch(`${BURGER_API_URL}/auth/login`, {

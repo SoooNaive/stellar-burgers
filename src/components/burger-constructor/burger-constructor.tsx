@@ -11,7 +11,7 @@ import {
   sendOrder,
   closeModalOrder,
   openModalOrder,
-} from '../../services/reducers/order';
+} from '../../services/reducers/create-order';
 
 import { openOrderModal } from '../../services/reducers/burger-constructor';
 import { addIngredient } from '../../services/reducers/burger-constructor';
@@ -65,15 +65,18 @@ export const BurgerConstructor: FC = () => {
       navigate('/login');
       return null;
     }
-    let allIngredients: any = [];
+    let allIngredients: string[] = [];
+
     const idIngedients = ingredients?.map((ingredient) => {
       return ingredient._id;
     });
     const idBun = bun?._id;
-    allIngredients = allIngredients.concat(idBun, idIngedients, idBun);
+    if (idBun) {
+      allIngredients = allIngredients.concat(idBun, idIngedients, idBun);
+    }
     if (!modal) {
       dispatch(sendOrder(allIngredients));
-      dispatch(openModalOrder(allIngredients));
+      dispatch(openModalOrder());
       dispatch(openOrderModal());
     } else {
       dispatch(closeModalOrder());

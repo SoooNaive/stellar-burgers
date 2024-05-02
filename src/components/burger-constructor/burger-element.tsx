@@ -87,19 +87,17 @@ export const BurgerElement = ({
   drag(drop(ref));
 
   return (
-    <>
-      <div className={style.ingredient} ref={ref} draggable>
-        <div className={style.icon}>
-          <DragIcon type="primary" />
-        </div>
-        <ConstructorElement
-          text={data.name}
-          thumbnail={data.image_mobile}
-          price={data.price}
-          isLocked={isLocked}
-          handleClose={() => handleDeleteIngredient(data)}
-        />
+    <div className={style.ingredient} ref={ref} draggable>
+      <div className={style.icon}>
+        <DragIcon type="primary" />
       </div>
-    </>
+      <ConstructorElement
+        text={data.name}
+        thumbnail={data.image_mobile}
+        price={data.price}
+        isLocked={isLocked}
+        handleClose={() => handleDeleteIngredient(data)}
+      />
+    </div>
   );
 };

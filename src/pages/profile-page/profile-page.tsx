@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { onLogout } from '../../services/actions/user';
-import { FC } from 'react';
 import { useTypedDispatch } from '../../types/types';
+import { FC } from 'react';
 
 import style from './profile-page.module.css';
 
@@ -15,6 +15,7 @@ export const ProfilePage: FC = () => {
     e.preventDefault();
     dispatch(onLogout());
   };
+
   return (
     <div className={style.container_profile}>
       <div className={style.container_link}>

@@ -1,7 +1,7 @@
 .modal {
   composes: pt-10 pl-10 pr-10 pb-15 from global;
   position: absolute;
-  z-index: 1;
+  z-index: 10;
   background: #1c1c21;
   overflow: overlay;
   max-width: 720px;

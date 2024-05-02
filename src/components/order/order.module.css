@@ -1,0 +1,71 @@
+.containerOrder {
+  background-color: #1c1c21;
+  max-width: 500px;
+  list-style: none;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 190px;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+.containerTitle {
+  display: flex;
+  justify-content: space-between;
+}
+.orderTitle {
+  composes: text text_type_digits-default from global;
+}
+.orderDate {
+  composes: text text_type_main-default text_color_inactive from global;
+}
+.orderName {
+  composes: text text_type_main-default from global;
+}
+
+.orderList {
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  position: relative;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.imgContainer {
+  position: absolute;
+  flex-grow: 1;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  flex-direction: column;
+  border: double 2px transparent;
+  background-image: linear-gradient(rgb(19, 19, 22), rgb(19, 19, 22)),
+    linear-gradient(63.18deg, #801ab3, #4c4cff);
+  border-radius: 50%;
+  background-clip: content-box, border-box;
+}
+
+.image {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+}
+.counter {
+  position: absolute;
+  font-size: 16px;
+  line-height: 24px;
+  left: 19px;
+  z-index: 7;
+}
+.price {
+  composes: text text_type_digits-default from global;
+  display: inline-flex;
+}
+.iconPrice {
+  display: flex;
+  padding-left: 10px;
+}
