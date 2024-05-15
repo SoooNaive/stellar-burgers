@@ -71,4 +71,4 @@ export const {
   onFetchOrderFulfilled,
   onFetchOrderRejected,
 } = orderSlice.actions;
-export const orderSReducer = orderSlice.reducer;
+export const ordersReducer = orderSlice.reducer;

@@ -4,7 +4,7 @@ import { modalIngredientsReducer } from './ingredient-details';
 import { burgerConstructorReducer } from './burger-constructor';
 import { modalOrderReduser } from './create-order';
 import { userReducer } from './user';
-import {orderSReducer} from './orders'
+import {ordersReducer} from './orders'
 
 export const rootReducer = combineReducers({
   ingredientsState: ingredientsReducer,
@@ -12,7 +12,7 @@ export const rootReducer = combineReducers({
   burgerConstructorState: burgerConstructorReducer,
   modalOrderState: modalOrderReduser,
   userState: userReducer,
-  orderState: orderSReducer,
+  orderState: ordersReducer,
 });
 
 export default rootReducer;
