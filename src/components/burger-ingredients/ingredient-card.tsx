@@ -40,28 +40,26 @@ export const IngredientCard = ({
   }, [ingredient._id, ingredients, ingredient.type, buns]);
 
   return (
-    <>
-      <div
-        className={style.card}
-        ref={dragRef}
-        onClick={() => onIngredientClick(ingredient)}
-      >
-        {count !== 0 && (
-          <Counter count={count} size="default" extraClass="m-1" />
-        )}
-        <img
-          className={style.image_card}
-          src={ingredient.image}
-          alt={ingredient.name}
-        />
-        <p className={style.price_card}>
-          {ingredient.price}
-          <span className={style.icon_price_card}>
-            <CurrencyIcon type="primary" />
-          </span>
-        </p>
-        <p className={style.name_card}>{ingredient.name}</p>
-      </div>
-    </>
+    <div
+      className={style.card}
+      ref={dragRef}
+      onClick={() => onIngredientClick(ingredient)}
+    >
+      {count !== 0 && (
+        <Counter count={count} size="default" extraClass="m-1" />
+      )}
+      <img
+        className={style.image_card}
+        src={ingredient.image}
+        alt={ingredient.name}
+      />
+      <p className={style.price_card}>
+        {ingredient.price}
+        <span className={style.icon_price_card}>
+          <CurrencyIcon type="primary" />
+        </span>
+      </p>
+      <p className={style.name_card}>{ingredient.name}</p>
+    </div>
   );
 };

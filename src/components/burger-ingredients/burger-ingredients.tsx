@@ -141,7 +141,7 @@ export const BurgerIngredients: FC = () => {
       </div>
       <div className={`scroll ${style.container_cards}`}>
         {listIngredients.map(({ typeTitle, ingredients, type }) => (
-          <div key={typeTitle}>
+          <div key={typeTitle} data-type={type}>
             <h2
               className={style.title_card}
               ref={typesRefs[type!]}
