@@ -1,10 +1,12 @@
+import { BURGER_API_URL } from '../../src/utils/burger-api';
+
 describe('service is available', function () {
   beforeEach(() => {
-    cy.intercept("GET", "https://norma.nomoreparties.space/api/ingredients", {
+    cy.intercept("GET", `${BURGER_API_URL}/ingredients`, {
       fixture: "ingredients",
     }).as("ingredients");
 
-    cy.visit("http://localhost:3000");
+    cy.visit('/')
   });
 
   it("create order", () => {
@@ -94,7 +96,7 @@ describe('service is available', function () {
     );
     cy.get("[class^=login-page_form__] button[type=submit]").click();
 
-    cy.intercept("POST", "https://norma.nomoreparties.space/api/auth/login", {
+    cy.intercept("POST", `${BURGER_API_URL}/auth/login`, {
       fixture: "login",
     }).as("login");
 
@@ -105,7 +107,7 @@ describe('service is available', function () {
     cy.log("Create order");
 
     cy.fixture("create-order").then((createOrderData) => {
-      cy.intercept("POST", "https://norma.nomoreparties.space/api/orders", {
+      cy.intercept("POST", `${BURGER_API_URL}/orders`, {
         delay: 1000,
         statusCode: 200,
         body: createOrderData,

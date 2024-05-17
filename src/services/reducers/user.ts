@@ -4,7 +4,7 @@ import { userRequest } from '../../utils/burger-api';
 
 import { TUserState, TUserFetchResponse, TError } from '../../types/types';
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   userData: {
     email: '',
     name: '',
